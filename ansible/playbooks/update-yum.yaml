@@ -1,6 +1,7 @@
 ---
-- host: all
-  become: true
-  task:
-    - name: upgrade all packages
-      yum: name=* state=latest
+- hosts: all
+  tasks:  
+    - name: update all packages - this is like running the 'yum update' command
+      yum:
+        name: "*"
+        state: latest
