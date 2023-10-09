@@ -7,7 +7,7 @@
       ansible.posix.authorized_key:
         user: ecloaiza
         state: present
-        key: "{{ lookup('file', '/authorized-keys/*.pub') }}"
+        key: "{{ lookup('file', '/authorized-keys/ecloaiza.pub') }}"
     - name: change sudoers file
       lineinfile:
         path: /etc/sudoers
