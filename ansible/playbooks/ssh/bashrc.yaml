@@ -62,3 +62,7 @@
       - 'echo -e -n "\E[1;34m"'
       - 'echo "├──Emmanuel Loaiza"'
       - 'echo "├──ELIKESBIKES"'
+      - 'echo "└──"$(date +"%B%e"), $(date +"%Y")'
+      - 'echo -e -n "\E[1;34m"'
+      - 'uptime'
+      - 'echo -e "\E[0m"'
