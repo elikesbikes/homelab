@@ -8,5 +8,5 @@
   - name: add comment to .bashrc
     ansible.builtin.lineinfile:
         path: "/root/.bashrc"        
-        line: [[ $- != *i* ]] && return
+        line: '[[ $- != *i* ]] && return'
     
