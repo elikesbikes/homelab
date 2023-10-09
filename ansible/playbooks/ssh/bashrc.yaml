@@ -60,6 +60,7 @@
         line: '{{ item }}'
     with_items:
       - 'echo -e -n "\E[1;34m"'
+      - 'figlet -w 50 "$(hostname)"'
       - 'echo "├──Emmanuel Loaiza"'
       - 'echo "├──ELIKESBIKES"'
       - 'echo "└──"$(date +"%B%e"), $(date +"%Y")'
