@@ -10,4 +10,9 @@
         path: "/root/.bashrc"        
         line: '[[ $- != *i* ]] && return'
     check_mode: yes
-    
+
+  - name: Ensure SELinux is set to enforcing mode
+    ansible.builtin.lineinfile:
+      path: /etc/selinux/config
+      regexp: '^SELINUX='
+      line: SELINUX=disabled
