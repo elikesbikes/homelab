@@ -34,11 +34,11 @@
       mode: 0600
       dest: /root/.bashrc
       owner: root
-      lineinfile:
-        regexp: '{{item.From}}'
-        # Line to Replace with
-        line: '{{item.To}}'
-        state: present  
-        path: /root/.bashrc
-      with_items:
-        - { From: 'alias vi', To: 'alias vim="vi"'}
+
+      regexp: '{{item.From}}'
+      # Line to Replace with
+      line: '{{item.To}}'
+      state: present  
+      path: /root/.bashrc
+    with_items:
+      - { From: 'alias vi', To: 'alias vim="vi"'}
