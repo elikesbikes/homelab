@@ -3,12 +3,16 @@
   hosts: all 
   become: yes
   tasks:
-    - name: install public keys
+    - name: install public keys - ecloaiza
       ansible.posix.authorized_key:
         user: ecloaiza
         state: present
-        key: "{{ lookup('file', '/authorized-keys/ecloaiza.pub') }}"
-        key: "{{ lookup('file', '/authorized-keys/root.pub') }}"
+        key: "{{ lookup('file', '/authorized-keys/ecloaiza.pub') }}"        
+    - name: install public keys - root
+      ansible.posix.authorized_key:
+        user: ecloaiza
+        state: present
+        key: "{{ lookup('file', '/authorized-keys/root.pub') }}"        
     - name: change sudoers file
       lineinfile:
         path: /etc/sudoers
