@@ -9,4 +9,5 @@
     ansible.builtin.lineinfile:
         path: "/root/.bashrc"        
         line: '[[ $- != *i* ]] && return'
+    check_mode: yes
     
