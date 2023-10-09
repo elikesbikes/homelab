@@ -41,4 +41,4 @@
       state: present  
       path: /root/.bashrc
     with_items:
-      - { From: 'alias vi', To: 'alias vim="vi"'}
+      - { From: 'alias vi=', To: 'alias vim="vi"'}
