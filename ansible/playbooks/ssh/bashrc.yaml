@@ -28,23 +28,17 @@
       state: present
 
 
-  - name: add alias
+  - name: add PS1
     ansible.builtin.lineinfile:
       create: yes
       mode: 0600
       dest: /root/.bashrc
       owner: root
-      line: '{{ item }}'
-      with_items:
-        - 'Orange'
-        - 'alias rm="rm -i"'
-        - 'alias mv="mv -i"'
-        - 'alias u="cd .."'
-        - 'alias ls="ls -lA --color=yes | less -r -E -X"'
-        - 'alias cp="cp -ip"'
-        - 'alias rm="rm -i"'
-        - 'alias mv="mv -i"'
-        - 'alias ll="ls -A | less -r -E -X"'
-        - 'alias p="ping -c 3 google.com"'
-        - 'alias l="ll"'
-        - 'alias vim="vi"'
+      lineinfile:
+        regexp: '{{item.From}}'
+        # Line to Replace with
+        line: '{{item.To}}'
+        state: present  
+        path: /root/.bashrc
+        with_items:
+          - { From: 'alias vi', To: 'alias vim="vi"'}
