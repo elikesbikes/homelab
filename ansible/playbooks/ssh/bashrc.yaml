@@ -1,0 +1,12 @@
+---
+- name: add ssh key
+  vars:
+    ansible_python_interpreter: /usr/bin/python3  
+  hosts: all 
+  become: yes
+  tasks:
+  - name; add comment to .bashrc
+    lineinfile:
+        path: "/root/.bashrc"        
+        line: [[ $- != *i* ]] && return
+    
