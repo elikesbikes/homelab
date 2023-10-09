@@ -51,14 +51,14 @@
       - { From: 'alias p=', To: 'alias vim="ping -c 3 google.com"'}
       - { From: 'alias l=', To: 'alias vim="ll"'}
 
-- name: add BANNER lines
-  ansible.builtin.lineinfile:
-      create: yes
-      mode: 0600
-      dest: /root/.bashrc
-      owner: root
-      line: '{{ item }}'
-  with_items:
-    - 'echo -e -n "\E[1;34m"'
-    - 'echo "├──Emmanuel Loaiza"'
-    - 'echo "├──ELIKESBIKES"'
+  - name: add BANNER lines
+    ansible.builtin.lineinfile:
+        create: yes
+        mode: 0600
+        dest: /root/.bashrc
+        owner: root
+        line: '{{ item }}'
+    with_items:
+      - 'echo -e -n "\E[1;34m"'
+      - 'echo "├──Emmanuel Loaiza"'
+      - 'echo "├──ELIKESBIKES"'
