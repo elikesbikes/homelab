@@ -1,0 +1,6 @@
+---
+- host: all
+  become: true
+  task:
+    - name: upgrade all packages
+      yum: name=* state=latest
