@@ -16,7 +16,8 @@
       path: /etc/selinux/config
       regexp: '^SELINUX='
       line: SELINUX=disabled
-  - name: add comment to .bashrc
+
+  - name: add PS1
     ansible.builtin.lineinfile:
       create: yes
       mode: 0600
@@ -25,3 +26,25 @@
       regexp: '^PS1='
       line: 'PS1="\[$(tput setaf 6)\]\@ \[\033[35;1m\]\u\[\033[0m\]@\[\033[31;1m\]\h \[\033[32;1m\]$PWD\[\033[0m\] [\[\033[35m\]\#\[\033[0m\]]\[\033[31m\]\$\[\033[0m\] "'
       state: present
+
+
+  - name: add PS1
+    ansible.builtin.lineinfile:
+      create: yes
+      mode: 0600
+      dest: /root/.bashrc
+      owner: root
+      line: '{{ item }}'
+      with_items:
+        - 'Orange'
+        - 'alias rm="rm -i"'
+        - 'alias mv="mv -i"'
+        - 'alias u="cd .."'
+        - 'alias ls="ls -lA --color=yes | less -r -E -X"'
+        - 'alias cp="cp -ip"'
+        - 'alias rm="rm -i"'
+        - 'alias mv="mv -i"'
+        - 'alias ll="ls -A | less -r -E -X"'
+        - 'alias p="ping -c 3 google.com"'
+        - 'alias l="ll"'
+        - 'alias vim="vi"'
