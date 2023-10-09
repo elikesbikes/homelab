@@ -51,12 +51,29 @@
       - { From: 'alias p=', To: 'alias pp="ping -c 3 google.com"'}
       - { From: 'alias l=', To: 'alias l="ll"'}
 
-  - name: add BANNER lines
+  - name: add BANNER lines - for root
     ansible.builtin.lineinfile:
         create: yes
         mode: 0600
         dest: /root/.bashrc
         owner: root
+        line: '{{ item }}'
+    with_items:
+      - 'echo -e -n "\E[1;34m"'
+      - 'figlet -w 50 "$(hostname)"'
+      - 'echo "├──Emmanuel Loaiza"'
+      - 'echo "├──ELIKESBIKES"'
+      - 'echo "└──"$(date +"%B%e"), $(date +"%Y")'
+      - 'echo -e -n "\E[1;34m"'
+      - 'uptime'
+      - 'echo -e "\E[0m"'
+
+  - name: add BANNER lines - for ecloaiza
+    ansible.builtin.lineinfile:
+        create: yes
+        mode: 0600
+        dest: /root/.bashrc
+        owner: ecloaiza
         line: '{{ item }}'
     with_items:
       - 'echo -e -n "\E[1;34m"'
