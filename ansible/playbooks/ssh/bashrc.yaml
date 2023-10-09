@@ -72,7 +72,7 @@
     ansible.builtin.lineinfile:
         create: yes
         mode: 0600
-        dest: /root/.bashrc
+        dest: /home/ecloaiza/.bashrc
         owner: ecloaiza
         line: '{{ item }}'
     with_items:
