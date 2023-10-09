@@ -53,8 +53,11 @@
 
 - name: add BANNER lines
   ansible.builtin.lineinfile:
-    path: /root/.bashrc
-    line: '{{ item }}'
+      create: yes
+      mode: 0600
+      dest: /root/.bashrc
+      owner: root
+      line: '{{ item }}'
   with_items:
     - 'echo -e -n "\E[1;34m"'
     - 'echo "├──Emmanuel Loaiza"'
