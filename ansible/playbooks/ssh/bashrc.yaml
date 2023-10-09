@@ -28,7 +28,7 @@
       state: present
 
 
-  - name: add PS1
+  - name: add alias
     ansible.builtin.lineinfile:
       create: yes
       mode: 0600
