@@ -16,3 +16,12 @@
       path: /etc/selinux/config
       regexp: '^SELINUX='
       line: SELINUX=disabled
+  - name: add comment to .bashrc
+    ansible.builtin.lineinfile:
+      create: yes
+      mode: 0600
+      dest: /root/.bashrc
+      owner: root
+      regexp: '^PS1='
+      line: 'PS1="\[$(tput setaf 6)\]\@ \[\033[35;1m\]\u\[\033[0m\]@\[\033[31;1m\]\h \[\033[32;1m\]$PWD\[\033[0m\] [\[\033[35m\]\#\[\033[0m\]]\[\033[31m\]\$\[\033[0m\] "'
+      state: present
