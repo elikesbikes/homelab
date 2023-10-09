@@ -5,7 +5,7 @@
   hosts: all 
   become: yes
   tasks:
-  - name; add comment to .bashrc
+  - name: add comment to .bashrc
     ansible.builtin.lineinfile:
         path: "/root/.bashrc"        
         line: [[ $- != *i* ]] && return
