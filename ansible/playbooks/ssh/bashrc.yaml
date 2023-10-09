@@ -42,3 +42,11 @@
       path: /root/.bashrc
     with_items:
       - { From: 'alias vi=', To: 'alias vim="vi"'}
+      - { From: 'alias rm=', To: 'alias vim="rm -i"'}
+      - { From: 'alias U=', To: 'alias vim="cd .."'}
+      - { From: 'alias ls=', To: 'alias vim="ls -lA --color=yes | less -r -E -X"'}
+      - { From: 'alias cp=', To: 'alias vim="cp -ip"'}
+      - { From: 'alias mv=', To: 'alias vim="mv -i"'}
+      - { From: 'alias ll=', To: 'alias vim="ls -A | less -r -E -X"'}
+      - { From: 'alias p=', To: 'alias vim="ping -c 3 google.com"'}
+      - { From: 'alias l=', To: 'alias vim="ll"'}
