@@ -5,11 +5,17 @@
   hosts: all 
   become: yes
   tasks:
-  - name: add comment to .bashrc
+  - name: add comment to .bashrc in root profile
     ansible.builtin.lineinfile:
         path: "/root/.bashrc"        
         line: '[[ $- != *i* ]] && return'
     check_mode: yes
+  - name: add comment to .bashrc in ecloaiza profile
+    ansible.builtin.lineinfile:
+        path: "/home/ecloaiza/.bashrc"        
+        line: '[[ $- != *i* ]] && return'
+    check_mode: yes
+
 
   - name: Ensure SELinux is set to enforcing mode
     ansible.builtin.lineinfile:
