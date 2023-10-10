@@ -80,7 +80,7 @@
       - { From: 'alias ll=', To: 'alias ll="ls -A | less -r -E -X"'}
       - { From: 'alias p=', To: 'alias pp="ping -c 3 google.com"'}
       - { From: 'alias l=', To: 'alias l="ll"'}
-      - { From: 'alias space=', To: 'alias space="du -h --max-depth=1"'}
+      - { From: 'alias space=', To: 'alias space="sudo du -h --max-depth=1"'}
 
 
 
