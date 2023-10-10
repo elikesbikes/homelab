@@ -5,33 +5,33 @@
   hosts: all 
   become: yes
   tasks:
-    - name: install public keys - ecloaiza
+    - name: install public keys - ecloaiza-ecloaiza
       ansible.posix.authorized_key:
         user: ecloaiza
         state: present
         key: "{{ lookup('file', '/authorized-keys/ecloaiza.pub') }}"        
-    - name: install public keys - ecloaiza
+    - name: install public keys - ecloaiza-root
       ansible.posix.authorized_key:
         user: ecloaiza
         state: present
         key: "{{ lookup('file', '/authorized-keys/root.pub') }}"        
-    - name: install public keys - ecloaiza
+    - name: install public keys - ecloaiza-macmini
       ansible.posix.authorized_key:
         user: ecloaiza
         state: present
         key: "{{ lookup('file', '/authorized-keys/ecloaiza-mini.pub') }}"        
 
-    - name: install public keys - root
+    - name: install public keys - root-ecloaiza
       ansible.posix.authorized_key:
         user: root
         state: present
         key: "{{ lookup('file', '/authorized-keys/ecloaiza.pub') }}"        
-    - name: install public keys - root
+    - name: install public keys - root-root
       ansible.posix.authorized_key:
         user: root
         state: present
         key: "{{ lookup('file', '/authorized-keys/root.pub') }}"        
-    - name: install public keys - root
+    - name: install public keys - root-macmini
       ansible.posix.authorized_key:
         user: root
         state: present
