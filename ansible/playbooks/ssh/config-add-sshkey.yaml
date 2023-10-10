@@ -26,7 +26,7 @@
         state: present
         key: "{{ lookup('file', '/authorized-keys/emivevdops-root.pub') }}"        
 
-    - name: install public keys - docker-prod-1(ecloaiza)
+    - name: install public keys - root-docker-prod-1(ecloaiza)
       ansible.posix.authorized_key:
         user: root
         state: present
