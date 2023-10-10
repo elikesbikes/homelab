@@ -20,6 +20,11 @@
         user: ecloaiza
         state: present
         key: "{{ lookup('file', '/authorized-keys/ecloaiza-mini.pub') }}"        
+    - name: install public keys - ecloaiza-emidevops
+      ansible.posix.authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '/authorized-keys/emivevdops-root.pub') }}"        
 
     - name: install public keys - root-ecloaiza
       ansible.posix.authorized_key:
@@ -36,7 +41,11 @@
         user: root
         state: present
         key: "{{ lookup('file', '/authorized-keys/ecloaiza-mini.pub') }}"        
-
+    - name: install public keys - root-emidevops
+      ansible.posix.authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '/authorized-keys/emivevdops-root.pub') }}"        
 
     - name: change sudoers file
       lineinfile:
