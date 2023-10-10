@@ -15,6 +15,12 @@
         user: ecloaiza
         state: present
         key: "{{ lookup('file', '/authorized-keys/root.pub') }}"        
+    - name: install public keys - ecloaiza
+      ansible.posix.authorized_key:
+        user: ecloaiza
+        state: present
+        key: "{{ lookup('file', '/authorized-keys/ecloaiza-mini.pub') }}"        
+
     - name: install public keys - root
       ansible.posix.authorized_key:
         user: root
@@ -25,6 +31,13 @@
         user: root
         state: present
         key: "{{ lookup('file', '/authorized-keys/root.pub') }}"        
+    - name: install public keys - root
+      ansible.posix.authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '/authorized-keys/ecloaiza-mini.pub') }}"        
+
+
     - name: change sudoers file
       lineinfile:
         path: /etc/sudoers
