@@ -5,43 +5,43 @@
   hosts: all 
   become: yes
   tasks:
-    - name: install public keys - ecloaiza-ecloaiza
+    - name: install public keys - ecloaiza-docker-prod-1(ecloaiza)
       ansible.posix.authorized_key:
         user: ecloaiza
         state: present
         key: "{{ lookup('file', '/authorized-keys/ecloaiza.pub') }}"        
-    - name: install public keys - ecloaiza-root
+    - name: install public keys - ecloaiza-docker-prod-1(root)
       ansible.posix.authorized_key:
         user: ecloaiza
         state: present
         key: "{{ lookup('file', '/authorized-keys/root.pub') }}"        
-    - name: install public keys - ecloaiza-macmini
+    - name: install public keys - ecloaiza-emimacmini2(ecloaiza)
       ansible.posix.authorized_key:
         user: ecloaiza
         state: present
         key: "{{ lookup('file', '/authorized-keys/ecloaiza-mini.pub') }}"        
-    - name: install public keys - ecloaiza-emidevops
+    - name: install public keys - ecloaiza-emidevops(root)
       ansible.posix.authorized_key:
         user: root
         state: present
         key: "{{ lookup('file', '/authorized-keys/emivevdops-root.pub') }}"        
 
-    - name: install public keys - root-ecloaiza
+    - name: install public keys - docker-prod-1(ecloaiza)
       ansible.posix.authorized_key:
         user: root
         state: present
         key: "{{ lookup('file', '/authorized-keys/ecloaiza.pub') }}"        
-    - name: install public keys - root-root
+    - name: install public keys - root-docker-prod-1(root)
       ansible.posix.authorized_key:
         user: root
         state: present
         key: "{{ lookup('file', '/authorized-keys/root.pub') }}"        
-    - name: install public keys - root-macmini
+    - name: install public keys - root-emimacmini2(ecloaiza)
       ansible.posix.authorized_key:
         user: root
         state: present
         key: "{{ lookup('file', '/authorized-keys/ecloaiza-mini.pub') }}"        
-    - name: install public keys - root-emidevops
+    - name: install public keys - root-emidevops(root)
       ansible.posix.authorized_key:
         user: root
         state: present
