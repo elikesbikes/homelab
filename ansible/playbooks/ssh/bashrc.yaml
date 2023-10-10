@@ -34,7 +34,7 @@
       state: present
 
 
-  - name: add ALIAS
+  - name: add ALIAS for root
     ansible.builtin.lineinfile:
       create: yes
       mode: 0600
@@ -57,6 +57,32 @@
       - { From: 'alias p=', To: 'alias pp="ping -c 3 google.com"'}
       - { From: 'alias l=', To: 'alias l="ll"'}
       - { From: 'alias space=', To: 'alias space="du -h --max-depth=1"'}
+
+  - name: add ALIAS for ecloaiza
+    ansible.builtin.lineinfile:
+      create: yes
+      mode: 0600
+      dest: /home/ecloaiza/.bashrc
+      owner: ecloaiza
+
+      regexp: '{{item.From}}'
+      # Line to Replace with
+      line: '{{item.To}}'
+      state: present  
+      path: /home/ecloaiza/.bashrc
+    with_items:
+      - { From: 'alias vi=', To: 'alias vim="vi"'}
+      - { From: 'alias rm=', To: 'alias rm="rm -i"'}
+      - { From: 'alias U=', To: 'alias U="cd .."'}
+      - { From: 'alias ls=', To: 'alias ls="ls -lA --color=yes | less -r -E -X"'}
+      - { From: 'alias cp=', To: 'alias cp="cp -ip"'}
+      - { From: 'alias mv=', To: 'alias mv="mv -i"'}
+      - { From: 'alias ll=', To: 'alias ll="ls -A | less -r -E -X"'}
+      - { From: 'alias p=', To: 'alias pp="ping -c 3 google.com"'}
+      - { From: 'alias l=', To: 'alias l="ll"'}
+      - { From: 'alias space=', To: 'alias space="du -h --max-depth=1"'}
+
+
 
   - name: add BANNER lines - for root
     ansible.builtin.lineinfile:
