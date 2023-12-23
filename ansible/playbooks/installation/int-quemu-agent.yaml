@@ -1,7 +1,24 @@
 ---
-- hosts: all
-  tasks:  
-    - name: Install qemu-guest-agent
-      yum:
+- name: Install QEMU Guest Agent
+  hosts: your_target_host
+  become: yes  # Run tasks with elevated privileges
+
+  tasks:
+    - name: Update package cache
+      package:
+        name: '*'
+        state: latest
+      become: yes
+
+    - name: Install QEMU Guest Agent
+      package:
         name: qemu-guest-agent
         state: present
+      become: yes
+
+    - name: Start QEMU Guest Agent service
+      service:
+        name: qemu-guest-agent
+        state: started
+        enabled: yes
+      become: yes
