@@ -1,6 +1,6 @@
 ---
 - name: Install QEMU Guest Agent
-  hosts: your_centos_servers
+  hosts: Proxmox
   become: true
 
   tasks:
