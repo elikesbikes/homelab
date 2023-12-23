@@ -1,6 +1,6 @@
 ---
 - name: Install QEMU Guest Agent
-  hosts: Proxmox
+  hosts: all
   become: true
 
   tasks:
