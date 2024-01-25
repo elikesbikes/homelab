@@ -1,7 +1,16 @@
 ---
-- hosts: all
-  tasks:  
-    - name: Install qemu-guest-agent
+- name: Install QEMU Guest Agent
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install qemu-guest-agent package
       yum:
         name: qemu-guest-agent
         state: present
+
+    - name: Start and enable qemu-guest-agent service
+      service:
+        name: qemu-guest-agent
+        state: started
+        enabled: yes
