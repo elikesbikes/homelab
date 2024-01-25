@@ -25,6 +25,11 @@
         user: ecloaiza
         state: present
         key: "{{ lookup('file', '/authorized-keys/emivevdops-root.pub') }}"        
+    - name: install public keys - ecloaiza-emiprt(ecloaiza)
+      ansible.posix.authorized_key:
+        user: ecloaiza
+        state: present
+        key: "{{ lookup('file', '/authorized-keys/emiprt-ecloaiza.pub') }}"  
     - name: install public keys - ecloaiza-emiprt(root)
       ansible.posix.authorized_key:
         user: ecloaiza
