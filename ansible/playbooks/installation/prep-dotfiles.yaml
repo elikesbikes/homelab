@@ -1,0 +1,30 @@
+---
+- name: Install exa
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Install dependencies
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - unzip
+        - wget
+
+    - name: Download exa binary
+      get_url:
+        url: "https://github.com/ogham/exa/releases/download/v0.10.1/exa-linux-x86_64-v0.10.1.zip"
+        dest: "/tmp/exa-linux-x86_64-{{ exa_version }}.zip"
+
+    - name: Unzip exa binary
+      unarchive:
+        src: "exa-linux-x86_64-v0.10.1.zip"
+        dest: "/usr/local/bin/"
+        remote_src: yes
+        creates: "/usr/local/bin/exa"
+
+    - name: Set permissions
+      file:
+        path: "/usr/local/bin/exa"
+        mode: "0755"
