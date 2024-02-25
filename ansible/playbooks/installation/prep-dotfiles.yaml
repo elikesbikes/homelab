@@ -15,7 +15,7 @@
     - name: Download exa binary
       get_url:
         url: "https://github.com/ogham/exa/releases/download/v0.10.1/exa-linux-x86_64-v0.10.1.zip"
-        dest: "/tmp/exa-linux-x86_64-{{ exa_version }}.zip"
+        dest: "/tmp/exa-linux-x86_64-v0.10.1.zip"
 
     - name: Unzip exa binary
       unarchive:
