@@ -12,10 +12,9 @@
         - wget
         - unzip
 
-    - name: Download exa
-      get_url:
-        url: "https://github.com/ogham/exa/releases/download/v0.10.0/exa-linux-x86_64-v0.10.0.zip"
-        dest: /tmp/exa.zip
+    - name: Download exa      
+      command: "curl -o /tmp/exa.zip https://github.com/ogham/exa/releases/download/v0.10.0/exa-linux-x86_64-v0.10.0.zip"
+        
 
     - name: Unzip exa
       unarchive:
