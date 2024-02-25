@@ -19,14 +19,14 @@
     - name: Unzip exa
       unarchive:
         src: /tmp/exa.zip
-        dest: /usr/local/bin/exa
+        dest: /usr/local/bin
         remote_src: yes
         creates: /usr/local/bin/exa
         
 
     - name: Make exa executable
       file:
-        path: /usr/local/bin/exa
+        path: /usr/local/bin/bin/exa
         mode: '+x'
 
 
