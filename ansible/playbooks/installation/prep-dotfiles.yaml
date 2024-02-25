@@ -21,7 +21,7 @@
         src: /tmp/exa.zip
         dest: /usr/local/bin
         remote_src: yes
-        creates: /usr/local/bin/exa
+        
 
     - name: Make exa executable
       file:
