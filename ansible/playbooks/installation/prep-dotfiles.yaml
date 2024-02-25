@@ -11,6 +11,8 @@
       loop:
         - wget
         - unzip
+        - git
+        - curl
 
     - name: Download exa
       get_url:
@@ -28,14 +30,6 @@
       file:
         path: /usr/local/bin/exa
         mode: '+x'
-
-    - name: Install dependencies
-      package:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - git
-        - curl
 
     - name: Clone YADM repository
       git:
