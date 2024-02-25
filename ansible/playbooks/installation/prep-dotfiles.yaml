@@ -1,16 +1,30 @@
 ---
-
 - name: Install exa
-  hosts: all
+  hosts: your_target_hosts
   become: yes
 
   tasks:
-  - name: Install exa
-      become_user: ecloaiza
-      command: "curl -sL https://github.com/ogham/exa/releases/download/v0.10.2/exa-linux-x86_64-v0.10.2.zip -o /tmp/exa.zip && unzip /tmp/exa.zip -d /tmp && mv /tmp/exa-linux-x86_64 /usr/local/bin/exa && chmod +x /usr/local/bin/exa"
-        
-    - name: Run YADM install script
-      shell: /opt/yadm/yadm bootstrap
-      args:
-        chdir: /opt/yadm
-      when: yadm_clone.changed
+    - name: Install dependencies
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - wget
+        - unzip
+
+    - name: Download exa
+      get_url:
+        url: "https://github.com/ogham/exa/releases/download/v0.10.1/exa-linux-x86_64-v0.10.1.zip"
+        dest: /tmp/exa.zip
+
+    - name: Unzip exa
+      unarchive:
+        src: /tmp/exa.zip
+        dest: /usr/local/bin
+        remote_src: yes
+        creates: /usr/local/bin/exa
+
+    - name: Make exa executable
+      file:
+        path: /usr/local/bin/exa
+        mode: '+x'
