@@ -1,6 +1,6 @@
 ---
 - name: Install exa
-  hosts: your_target_hosts
+  hosts: all
   become: yes
 
   tasks:
