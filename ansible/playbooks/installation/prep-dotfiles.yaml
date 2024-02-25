@@ -19,7 +19,7 @@
     - name: Unzip exa
       unarchive:
         src: /tmp/exa.zip
-        dest: /usr/local/bin
+        dest: /usr/local/bin/exa
         remote_src: yes
         
 
