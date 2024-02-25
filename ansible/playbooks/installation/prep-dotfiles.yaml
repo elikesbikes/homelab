@@ -28,6 +28,7 @@
       file:
         path: "/usr/local/bin/exa"
         mode: "0755"
+  
     - name: Install YADM
       hosts: all
       become: yes
