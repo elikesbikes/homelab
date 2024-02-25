@@ -28,3 +28,20 @@
       file:
         path: "/usr/local/bin/exa"
         mode: "0755"
+    - name: Install YADM
+      hosts: all
+      become: yes
+      tasks:
+        - name: Install dependencies
+          apt:
+            name: 
+              - git
+              - rsync
+            state: present
+          when: ansible_os_family == "Debian"  # Adjust for other package managers
+        
+        - name: Run YADM install script
+          shell: /opt/yadm/yadm bootstrap
+          args:
+            chdir: /opt/yadm
+          when: yadm_clone.changed
