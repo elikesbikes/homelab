@@ -29,5 +29,12 @@
         path: /usr/local/bin/bin/exa
         mode: '+x'
 
+    - name: Install direnv (RHEL/CentOS)
+      become: yes
+      shell: curl -sfL https://direnv.net/install.sh | bash
+      args:
+        creates: /usr/local/bin/direnv
+      when: ansible_pkg_mgr == 'yum'
+
 
      
