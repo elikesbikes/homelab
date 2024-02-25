@@ -14,22 +14,18 @@
         - git
         - curl
 
-    - name: Download exa
-      get_url:
-        url: "https://github.com/ogham/exa/releases/download/v0.10.1/exa-linux-x86_64-v0.10.1.zip"
-        dest: /tmp/exa.zip
+    - name: Install dnf-utils
+      package:
+        name: dnf-utils
+        state: present
 
-    - name: Unzip exa
-      unarchive:
-        src: /tmp/exa.zip
-        dest: /usr/local/bin
-        remote_src: yes
-        creates: /usr/local/bin/exa
+    - name: Add COPR repository for exa
+      command: dnf copr enable -y tcg/exa
 
-    - name: Make exa executable
-      file:
-        path: /usr/local/bin/exa
-        mode: '+x'
+    - name: Install exa
+      package:
+        name: exa
+        state: present
 
     - name: Clone YADM repository
       git:
