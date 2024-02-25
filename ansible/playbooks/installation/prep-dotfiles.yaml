@@ -19,9 +19,6 @@
         name: dnf-utils
         state: present
 
-    - name: Add COPR repository for exa
-      command: dnf copr enable -y tcg/exa
-
     - name: Install exa
       package:
         name: exa
