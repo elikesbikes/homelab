@@ -46,6 +46,16 @@
         creates: /usr/local/bin/direnv
       when: ansible_pkg_mgr == 'yum'
 
+    - name: Install EPEL repository
+      yum:
+        name: epel-release
+        state: present
+
+    - name: Install Direnv
+      yum:
+        name: direnv
+        state: present
+
     - name: Install dependencies for YADM
       package:
         name: "{{ item }}"
