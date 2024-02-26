@@ -93,10 +93,16 @@
         clone: yes
       when: not repo_dir.stat.exists
 
-    - name: Delete a file
+#    - name: Delete a file
+#      file:
+#        path: /home/ecloaiza/.bashrc
+#        state: absent
+    - name: Ensure directory is absent
       file:
-        path: /home/ecloaiza/.bashrc
+        path: "/tmp/git-ecloaiza"
         state: absent
+        recurse: yes  # This ensures the directory and its contents are recursively removed
+
 
     - name: Find all files
       ansible.builtin.find:
