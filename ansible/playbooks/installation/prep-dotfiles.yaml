@@ -82,5 +82,5 @@
       git:
         repo: "{{ github_repo_url }}"
         dest: "{{ local_clone_path }}"      
-      clone: yes
+        clone: yes
       when: not repo_dir.stat.exists
