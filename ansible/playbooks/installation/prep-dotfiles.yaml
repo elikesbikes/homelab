@@ -110,7 +110,7 @@
         path: /home/ecloaiza/.bashrc
         state: absent
 
-   - name: Move files recursively
-      shell: mv {{ item.src }} {{ item.dest }}
-      with_filetree: "/tmp/git-ecloaiza"
-      when: not (item.dest is exists)
+    - name: Move files recursively
+        shell: mv {{ item.src }} {{ item.dest }}
+        with_filetree: "/tmp/git-ecloaiza"
+        when: not (item.dest is exists)
