@@ -93,6 +93,11 @@
         clone: yes
       when: not repo_dir.stat.exists
 
+    - name: Delete a file
+      file:
+        path: /home/ecloaiza/.bashrc
+        state: absent
+
     - name: Find all files
       ansible.builtin.find:
         paths: "{{ local_clone_path }}" 
@@ -100,15 +105,15 @@
         file_type: file
       register: files_to_move
 
-    - name: Delete a file
-      file:
-        path: /home/ecloaiza/.bashrc
-        state: absent
-
-
     - name: Move files for CLone Repository
       ansible.builtin.shell:
         cmd: mv "{{ item.path }}" /home/ecloaiza/
       with_items: "{{ files_to_move.files }}"
 
-
+    - name: Copy a single file
+      copy:
+        src: "/tmp/git-ecloaiza/.bashrc"
+        dest: /home/ecloaiza/.bashrc
+        owner: ecloaiza
+        group: ecloaiza
+        mode: 0644
