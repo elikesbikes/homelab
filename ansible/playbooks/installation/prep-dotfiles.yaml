@@ -3,6 +3,10 @@
   hosts: all
   become: yes
 
+  vars:
+    github_repo_url: "https://github.com/elikesbikes/linux_dotfiles"
+    local_clone_path: "/home/ecloaiza"
+
   tasks:
     - name: Install dependencies
       package:
@@ -69,8 +73,14 @@
         name: neofetch
         state: present
 
+    - name: Check if the repository directory exists
+      stat:
+        path: "{{ local_clone_path }}"
+      register: repo_dir
+
     - name: Clone YADM repository
       git:
-        repo: https://github.com/elikesbikes/linux_dotfiles
-        dest: /home/ecloaiza
-        update: no
+        repo: "{{ github_repo_url }}"
+        dest: "{{ local_clone_path }}"      
+       close: https://github.com/TheLocehiliosan/yadm/raw/master/yadm"
+      when: not repo_dir.stat.exists
