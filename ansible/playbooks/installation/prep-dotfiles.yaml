@@ -46,15 +46,6 @@
         creates: /usr/local/bin/direnv
       when: ansible_pkg_mgr == 'yum'
 
-    - name: Install EPEL repository
-      yum:
-        name: epel-release
-        state: present
-
-    - name: Install Direnv
-      yum:
-        name: direnv
-        state: present
 
     - name: Install dependencies for YADM
       package:
@@ -99,4 +90,4 @@
         repo: "{{ github_repo_url }}"
         dest: "{{ local_clone_path }}"      
         clone: yes
-      when: not repo_dir.stat.exists
+      #when: not repo_dir.stat.exists
