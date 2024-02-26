@@ -46,3 +46,9 @@
 
     - name: Download YUDM    
       command: "curl -fLo /usr/local/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm"
+  
+    - name: Make YUDM executable
+      file:
+        path: /usr/local/bin/yudm
+        mode: '+x'
+
