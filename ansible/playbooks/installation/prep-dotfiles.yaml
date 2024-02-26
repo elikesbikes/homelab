@@ -36,5 +36,12 @@
         creates: /usr/local/bin/direnv
       when: ansible_pkg_mgr == 'yum'
 
+    - name: Install dependencies for YADM
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - git
+        - curl
 
      
