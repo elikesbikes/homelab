@@ -23,7 +23,7 @@
 
     - name: Download exa      
       command: "curl -fLo /tmp/exa.zip https://github.com/ogham/exa/releases/download/v0.10.0/exa-linux-x86_64-v0.10.0.zip"
-      when: file_stat.stat.exists   
+      when: not file_stat.stat.exists   
 
     - name: Unzip exa
       unarchive:
