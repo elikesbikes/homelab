@@ -113,3 +113,13 @@
     - name: Move file
       ansible.builtin.shell:
         cmd: mv "/tmp/git-ecloaiza/.bashrc" /home/ecloaiza/
+
+    - name: Install required packages
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - curl
+
+    - name: Install Starship
+      shell: curl -fsSL https://starship.rs/install.sh | bash -s -- -y
