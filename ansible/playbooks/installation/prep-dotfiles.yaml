@@ -54,9 +54,15 @@
         - git
         - curl
 
+    - name: Check if YADM exists
+      stat:
+        path: /usr/local/bin/yadm
+      register: file_stat
+
     - name: Download YUDM    
       command: "curl -fLo /usr/local/bin/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm"
-  
+      when: not file_stat.stat.exists  
+        
     - name: Make YUDM executable
       file:
         path: /usr/local/bin/yadm
