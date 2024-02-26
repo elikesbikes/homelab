@@ -12,7 +12,7 @@
         - wget
         - unzip
 
-    - name: Check if file exists
+    - name: Check if EXA exists
       stat:
         path: /usr/local/bin/bin/exa
       register: file_stat
