@@ -106,7 +106,7 @@
         state: absent
 
 
-    - name: Move files
+    - name: Move files for CLone Repository
       ansible.builtin.shell:
         cmd: mv "{{ item.path }}" /home/ecloaiza/
       with_items: "{{ files_to_move.files }}"
