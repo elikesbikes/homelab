@@ -62,3 +62,9 @@
       package:
         name: neofetch
         state: present
+
+    - name: Clone YADM repository
+      git:
+        repo: https://github.com/elikesbikes/linux_dotfiles
+        dest: /home/ecloaiza
+        update: no
