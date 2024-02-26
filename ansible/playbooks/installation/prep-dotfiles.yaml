@@ -100,17 +100,15 @@
         file_type: file
       register: files_to_move
 
-#    - name: Move files
-#      ansible.builtin.shell:
-#        cmd: mv "{{ item.path }}" /home/ecloaiza/
-#      with_items: "{{ files_to_move.files }}"
-
     - name: Delete a file
       file:
         path: /home/ecloaiza/.bashrc
         state: absent
 
-    - name: Move files recursively
-        shell: mv {{ item.src }} {{ item.dest }}
-        with_filetree: "/tmp/git-ecloaiza"
-        when: not (item.dest is exists)
+
+    - name: Move files
+      ansible.builtin.shell:
+        cmd: mv "{{ item.path }}" /home/ecloaiza/
+      with_items: "{{ files_to_move.files }}"
+
+
