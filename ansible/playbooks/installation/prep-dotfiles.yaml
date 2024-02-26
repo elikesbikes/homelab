@@ -52,3 +52,13 @@
         path: /usr/local/bin/yudm
         mode: '+x'
 
+    - name: Install epel-release package (required for CentOS)
+      package:
+        name: epel-release
+        state: present
+      when: ansible_os_family == 'RedHat'  # Check if the OS is RedHat based (CentOS)
+
+    - name: Install neofetch
+      package:
+        name: neofetch
+        state: present
