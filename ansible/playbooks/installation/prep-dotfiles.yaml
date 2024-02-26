@@ -12,9 +12,14 @@
         - wget
         - unzip
 
+    - name: Check if file exists
+      stat:
+        path: /usr/local/bin/bin/exa
+      register: file_stat
+
     - name: Download exa      
       command: "curl -fLo /tmp/exa.zip https://github.com/ogham/exa/releases/download/v0.10.0/exa-linux-x86_64-v0.10.0.zip"
-        
+      when: file_stat.stat.exists   
 
     - name: Unzip exa
       unarchive:
@@ -23,6 +28,7 @@
         remote_src: yes
         creates: /usr/local/bin/exa
         
+
 
     - name: Make exa executable
       file:
