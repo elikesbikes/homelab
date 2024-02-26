@@ -1,5 +1,5 @@
 ---
-- name: Install exa
+- name: Install Files for dotfiles
   hosts: all
   become: yes
 
@@ -82,5 +82,5 @@
       git:
         repo: "{{ github_repo_url }}"
         dest: "{{ local_clone_path }}"      
-       close: https://github.com/TheLocehiliosan/yadm/raw/master/yadm"
+      clone: yes
       when: not repo_dir.stat.exists
