@@ -80,19 +80,6 @@
         name: neofetch
         state: present
 
-    - name: Check if the repository directory exists
-      stat:
-        path: "{{ local_clone_path }}"
-      register: repo_dir
-
-    - name: Clone YADM repository
-      become: yes
-      git:
-        repo: "{{ github_repo_url }}"
-        dest: "{{ local_clone_path }}"      
-        clone: yes
-      when: not repo_dir.stat.exists
-
 #    - name: Delete a file
 #      file:
 #        path: /home/ecloaiza/.bashrc
