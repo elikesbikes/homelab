@@ -64,3 +64,9 @@
         regexp: '^%sudo'
         line: '%sudo ALL=(ALL) NOPASSWD: ALL'
         validate: /usr/sbin/visudo -cf %s
+
+    - name: install public keys - ecloaiza-asus-gaming(ecloaiza)
+      ansible.posix.authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '/authorized-keys/asus-gamin-ecloaiza.pub') }}"     
