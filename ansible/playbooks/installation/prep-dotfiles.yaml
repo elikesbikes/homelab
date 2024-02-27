@@ -117,9 +117,9 @@
         cmd: mv "{{ item.path }}" /home/ecloaiza/
       with_items: "{{ files_to_move.files }}"
 
-    - name: Move file
-      ansible.builtin.shell:
-        cmd: mv "/tmp/git-ecloaiza/.bashrc" /home/ecloaiza/
+#    - name: Move file
+#      ansible.builtin.shell:
+#        cmd: mv "/tmp/git-ecloaiza/.bashrc" /home/ecloaiza/
 
     - name: Install required packages
       package:
