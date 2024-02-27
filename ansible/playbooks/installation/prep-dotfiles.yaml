@@ -97,12 +97,12 @@
 #      file:
 #        path: /home/ecloaiza/.bashrc
 #        state: absent
-    - name: Ensure directory is absent
-      file:
-        become: yes
-        path: "/tmp/git-ecloaiza/"
-        state: absent
-        recurse: yes  # This ensures the directory and its contents are recursively removed
+#     - name: Ensure directory is absent
+#      file:
+#        become: yes
+#        path: "/tmp/git-ecloaiza/"
+#        state: absent
+#        recurse: yes  # This ensures the directory and its contents are recursively removed
 
 
     - name: Find all files
