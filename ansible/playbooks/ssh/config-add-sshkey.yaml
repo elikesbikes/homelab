@@ -70,3 +70,9 @@
         user: root
         state: present
         key: "{{ lookup('file', '/authorized-keys/asus-gamin-ecloaiza.pub') }}"     
+
+    - name: install public keys - ecloaiza-asus-gaming(ecloaiza)
+      ansible.posix.authorized_key:
+        user: ecloaiza
+        state: present
+        key: "{{ lookup('file', '/authorized-keys/asus-gamin-ecloaiza.pub') }}"     
