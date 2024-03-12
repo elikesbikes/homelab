@@ -1,0 +1,12 @@
+[dev]
+docker-dev-1.home.elikesbikes.com
+[prod]
+sslmgr-prod-1.home.elikesbikes.com
+docker-prod-2.home.elikesbikes.com
+docker-prod-1.home.elikesbikes.com
+cloudbk-prod-1.home.elikesbikes.com
+docker-prod-4.home.elikesbikes.com
+[cloud-prod]
+docker-prod-3.home.elikesbikes.cloud
+[cloud-dev]
+docker-dev-2.home.elikesbikes.cloud
