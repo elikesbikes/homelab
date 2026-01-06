@@ -6,12 +6,12 @@ This document describes the UniFi-based network architecture for the local envir
 ## 🏗️ Physical Topology
 The network originates from a **Spectrum** ISP connection and is distributed through a series of UniFi switches and Access Points.
 
-```
+
 ![Network Topology](2026-01-06_10-52.png)
 <img src="2026-01-06_10-52.png" alt="Network Topology" width="600">
 
 
-```
+
 ## 🔢 Logical Segmentation (VLANs)
 
 The network uses VLANs to isolate management traffic from IoT and guest devices.
