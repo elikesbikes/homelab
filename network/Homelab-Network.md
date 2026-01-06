@@ -39,9 +39,13 @@ graph LR
 
 The network uses VLANs to isolate management traffic from IoT and guest devices.
 VLAN,Name,Subnet,Purpose
+
 1,Management,X.X.X.X/24,Infrastructure & Gateway management.
+
 2,DMZ,X.X.X.X/24,Isolated services.
+
 5,Home,X.X.X.X/24,Primary trusted devices (SSID: EMILIKESBIKES).
+
 6,IoT,X.X.X.X/24,Smart home/untrusted devices (SSID: E-IoT).v
 
 ## 📶 Wireless Configuration (SSIDs)
