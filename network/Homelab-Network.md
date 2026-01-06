@@ -7,7 +7,8 @@ This document describes the UniFi-based network architecture for the local envir
 The network originates from a **Spectrum** ISP connection and is distributed through a series of UniFi switches and Access Points.
 
 ```
-![tpology](2026-01-06_10-52.png)
+![Network Topology](2026-01-06_10-52.png)
+<img src="2026-01-06_10-52.png" alt="Network Topology" width="600">
 
 
 ```
