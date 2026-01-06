@@ -52,7 +52,9 @@ VLAN,Name,Subnet,Purpose
 Wireless networks are mapped to specific VLANs to ensure device security.
 
 SSID,Network,Bands,Security,Notes
+
 EMILIKESBIKES,Home (VLAN 5),"2.4 GHz, 5 GHz",WPA2,Trusted personal devices.
+
 E-IoT,IoT (VLAN 6),2.4 GHz,WPA2,Isolated smart home devices.
 
 ## Radio & Optimization
@@ -60,17 +62,23 @@ E-IoT,IoT (VLAN 6),2.4 GHz,WPA2,Isolated smart home devices.
 
 Channel Widths: 2.4 GHz is set to 20 MHz; 5 GHz is set to 80 MHz for peak performance.
 
-🛠️ Hardware Inventory
+## 🛠️ Hardware Inventory
 
 Device Name,Role,Primary Connectivity
+
 router-prod-1b,Gateway / Console,Primary WAN Termination
+
 aggregate-laundry-1,Core Aggregation,2.5 GbE SFP+
+
 switch-laundry-1,Main Switch,GbE PoE Distribution
+
 switch-Office-1,Office Switch,2.5 GbE Performance
+
 ap-livingroom-1,Access Point,Main Floor Coverage
+
 ap-patio-1,Access Point,Outdoor Coverage
 
-🔒 Security Posture
+## 🔒 Security Posture
 
 Inter-VLAN Routing: Firewall rules are configured to prevent VLAN 6 (IoT) from reaching VLAN 5 (Home).
 
