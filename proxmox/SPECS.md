@@ -7,6 +7,7 @@ Dell PowerEdge R620 running Proxmox VE 8.4 as a production hypervisor in a multi
 
 ### Network Architecture
 
+``
 ┌─────────────────────────────────────────────┐
 │ Network Segmentation Model │
 ├─────────────────────────────────────────────┤
@@ -24,7 +25,7 @@ Dell PowerEdge R620 running Proxmox VE 8.4 as a production hypervisor in a multi
 │ - 4x Intel I350 ports │
 │ - 2x Broadcom BCM5720 ports │
 └─────────────────────────────────────────────┘
-
+``
 
 ### Storage Architecture
 ┌─────────────────────────────────────────────┐
