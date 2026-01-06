@@ -7,33 +7,7 @@ This document describes the UniFi-based network architecture for the local envir
 The network originates from a **Spectrum** ISP connection and is distributed through a series of UniFi switches and Access Points.
 
 ```
-graph LR
-    ISP[Spectrum] --> Router[router-prod-1b]
-    Router --> SW_L1[switch-laundry-1]
-    
-    subgraph Core_Backbone
-        SW_L1 --- AGG_L1[aggregate-laundry-1]
-        AGG_L1 -- 2.5 GbE --- SW_OFF[switch-Office-1]
-        SW_L1 --> SW_L2[switch-laundry-2]
-    end
-
-    subgraph Wireless_Access
-        SW_L1 --> AP_LR[ap-livingroom-1]
-        SW_L1 --> AP_KT[ap-kitchen-1]
-        SW_L2 --> AP_PT[ap-patio-1]
-    end
-
-    subgraph Master_Bedroom_Wing
-        SW_L1 --> SW_MB1[switch-mb-1]
-        SW_MB1 --> AP_NC[ap-nicole-1]
-        SW_MB1 --> AP_MB[ap-mb-1]
-        SW_MB1 --> SW_MB2[switch-mb-2]
-    end
-
-    subgraph Peripherals
-        SW_L1 --> SW_LR[switch-livingroom-1]
-        SW_L1 --> SW_GR[switch-garage-1]
-    end
+/home/ecloaiza/Pictures/2026-01-06_10-52.png
 ```
 ## 🔢 Logical Segmentation (VLANs)
 
