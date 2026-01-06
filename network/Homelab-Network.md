@@ -7,7 +7,9 @@ This document describes the UniFi-based network architecture for the local envir
 The network originates from a **Spectrum** ISP connection and is distributed through a series of UniFi switches and Access Points.
 
 ```
-/home/ecloaiza/Pictures/2026-01-06_10-52.png
+![tpology](2026-01-06_10-52.png)
+
+
 ```
 ## 🔢 Logical Segmentation (VLANs)
 
