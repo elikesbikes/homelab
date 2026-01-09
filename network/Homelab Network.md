@@ -1,9 +1,11 @@
 # Network Architecture Documentation
 
 ## 🌐 Overview
+
 This document describes the UniFi-based network architecture for the local environment. It is designed with a focus on high-speed backbone connectivity (up to 2.5 GbE) and strict logical segmentation for security.
 
 ## 🏗️ Physical Topology
+
 The network originates from a **Spectrum** ISP connection and is distributed through a series of UniFi switches and Access Points.
 
 <img src="2026-01-06_10-52.png" alt="Network Topology" width="600">
@@ -19,6 +21,7 @@ VLAN,Name,Subnet,Purpose
 4. IoT,X.X.X.X/24,Smart home/untrusted devices (SSID: E-IoT).v
 
 ## 📶 Wireless Configuration (SSIDs)
+
 Wireless networks are mapped to specific VLANs to ensure device security.
 
 - SSID,Network,Bands,Security,Notes
@@ -28,6 +31,7 @@ Wireless networks are mapped to specific VLANs to ensure device security.
 - E-IoT,IoT (VLAN 6),2.4 GHz,WPA2,Isolated smart home devices.
 
 ## Radio & Optimization
+
 5 GHz Roaming Assistant: Enabled at -60 dBm threshold for smooth handoffs.
 
 -  Channel Widths: 2.4 GHz is set to 20 MHz; 5 GHz is set to 80 MHz for peak performance.
