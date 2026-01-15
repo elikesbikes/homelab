@@ -1,14 +1,13 @@
 # Global Coding & Collaboration Rules
 
-**Author:** Tars (ELIKESBIKES)
-#!/usr/bin/env python3
 
-"""
 TITLE:       master_collaboration_standards.py
 AUTHOR:      Tars (ELIKESBIKES)
 VERSION:     2.1.0
+
 DESCRIPTION: The single source of truth for coding, environment, and collaboration protocols.
--------------------------------------------------------------------------------
+
+------------------------------------------------------------------------
 CHANGELOG:
 2026-01-15 | 2.1.0 | Added Ruthless Mentor recommendations (Linting, Traps, Modularity).
 2026-01-15 | 2.0.0 | Integrated Tars' rules with Fail-Fast and SemVer logic.
@@ -17,10 +16,6 @@ CHANGELOG:
 
 # Master Collaborative Coding & Environment Standards
 
-> **Author:** Tars (ELIKESBIKES)  
-> **Status:** ACTIVE / MANDATORY
-
----
 
 ## 2. Execution & Environment Standards
 
