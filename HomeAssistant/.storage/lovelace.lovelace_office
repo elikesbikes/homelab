@@ -1,0 +1,152 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace.lovelace_office",
+  "data": {
+    "config": {
+      "views": [
+        {
+          "title": "Lights",
+          "icon": "mdi:lightbulb-group",
+          "type": "sections",
+          "max_columns": 4,
+          "cards": [],
+          "sections": [
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Kitchen", "icon": "mdi:countertop"},
+                {"type": "tile", "entity": "light.kasa_kitchen_cooking", "name": "Cooking"},
+                {"type": "tile", "entity": "light.kasa_kitchen_breakfast", "name": "Breakfast"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Living Room", "icon": "mdi:sofa"},
+                {"type": "tile", "entity": "light.kasa_livingr_all", "name": "All"},
+                {"type": "tile", "entity": "light.kasa_livingroom_farback", "name": "Far Back"},
+                {"type": "tile", "entity": "light.kasa_livingroom_1bulb", "name": "1 Bulb"},
+                {"type": "tile", "entity": "light.kasa_livingroom_2bulb", "name": "2 Bulb"},
+                {"type": "tile", "entity": "light.kasa_livingroom_tv_rgb", "name": "TV RGB"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Master Bedroom", "icon": "mdi:bed-king-outline"},
+                {"type": "tile", "entity": "light.kasa_mb_main_bulb", "name": "Main Bulb"},
+                {"type": "tile", "entity": "light.kasa_mb_emmanuel_bulb", "name": "EMI Bulb"},
+                {"type": "tile", "entity": "light.kasa_mb_rebeca_bulb", "name": "Rebeca Bulb"},
+                {"type": "tile", "entity": "light.kasa_mb_tvlights", "name": "TV Lights"},
+                {"type": "tile", "entity": "light.kasa_mb_mirror_lights", "name": "Mirror Lights"},
+                {"type": "tile", "entity": "light.kasa_mb_bath_lights", "name": "Bath Lights"},
+                {"type": "tile", "entity": "light.kasa_mb_shower_lights", "name": "Shower Lights"},
+                {"type": "tile", "entity": "light.kasa_mb_toilet_light", "name": "Toilet Light"},
+                {"type": "tile", "entity": "light.kasa_mb_closet", "name": "Closet"},
+                {"type": "tile", "entity": "light.kasa_mb_closet_e", "name": "Closet E"},
+                {"type": "tile", "entity": "light.kasa_closet_r", "name": "Closet R"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Nicole", "icon": "mdi:account-heart"},
+                {"type": "tile", "entity": "light.kasa_2nd_shower_lights", "name": "Shower Light"},
+                {"type": "tile", "entity": "light.kasa_2ndbath_lights", "name": "Bath Lights"},
+                {"type": "tile", "entity": "light.kasa_nicole_bedlamp", "name": "Bed Lamp"},
+                {"type": "tile", "entity": "light.kasa_nicole_desklamp", "name": "Desk Lamp"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Joshua", "icon": "mdi:account"},
+                {"type": "tile", "entity": "light.kasa_joshua_bedlamp", "name": "Bed Lamp"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Entryway", "icon": "mdi:door-open"},
+                {"type": "tile", "entity": "light.kasa_entryway_cealing", "name": "Ceiling"},
+                {"type": "tile", "entity": "light.kasa_entryway_stairs", "name": "Stairs"},
+                {"type": "tile", "entity": "light.kasa_entryway_table_bulb", "name": "Table Bulb"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Half Bath", "icon": "mdi:toilet"},
+                {"type": "tile", "entity": "light.kasa_halfbath_lights", "name": "Lights"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Garage", "icon": "mdi:garage"},
+                {"type": "tile", "entity": "light.kasa_garage_lights", "name": "Lights"},
+                {"type": "tile", "entity": "light.kasa_attic_lights", "name": "Attic Lights"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Laundry Room", "icon": "mdi:washing-machine"},
+                {"type": "tile", "entity": "light.kasa_laundry_lights", "name": "Lights"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Studio", "icon": "mdi:television-play"},
+                {"type": "tile", "entity": "light.kasa_mb_tablelamp", "name": "Lamp Bulb"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Homelab", "icon": "mdi:server"},
+                {"type": "tile", "entity": "light.kasa_homelab_lights2", "name": "RGB Lights"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Office", "icon": "mdi:desk"},
+                {"type": "tile", "entity": "light.kasa_office_monitorlight", "name": "Monitor Light"},
+                {"type": "tile", "entity": "light.kasa_office_desk_left", "name": "Desk Left"},
+                {"type": "tile", "entity": "light.kasa_homelab_bulb", "name": "Homelab Bulb"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Porch", "icon": "mdi:home-outline"},
+                {"type": "tile", "entity": "light.kasa_balcony_whitelights", "name": "Balcony White Lights"},
+                {"type": "tile", "entity": "light.kasa_porch_hanginglights", "name": "Hanging Lights"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Patio", "icon": "mdi:table-furniture"},
+                {"type": "tile", "entity": "light.kasa_patio_mult1_all_kasa_patio_lights1", "name": "Patio Lights"},
+                {"type": "tile", "entity": "light.wemo_patio", "name": "Wemo Patio"},
+                {"type": "tile", "entity": "light.wemo_patio_2", "name": "Wemo Patio 2"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "PainCave", "icon": "mdi:dumbbell"},
+                {"type": "tile", "entity": "light.kasa_patio_mult1_all_kasa_patio_christmaslights", "name": "Christmas Lights"},
+                {"type": "tile", "entity": "light.tuya_paincave_bulb", "name": "Bulb"}
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

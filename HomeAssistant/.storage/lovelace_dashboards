@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace_dashboards",
+  "data": {
+    "items": [
+      {
+        "require_admin": false,
+        "show_in_sidebar": true,
+        "icon": "mdi:alarm-light-outline",
+        "title": "Main Floor",
+        "url_path": "lovelace-entryway",
+        "mode": "storage",
+        "id": "lovelace_entryway"
+      },
+      {
+        "require_admin": false,
+        "show_in_sidebar": true,
+        "title": "Kitchen",
+        "url_path": "lovelace-kitchen",
+        "mode": "storage",
+        "id": "lovelace_kitchen",
+        "icon": "mdi:fridge"
+      },
+      {
+        "require_admin": false,
+        "show_in_sidebar": true,
+        "title": "Master Bedroom",
+        "url_path": "master-bedroom",
+        "mode": "storage",
+        "id": "master_bedroom",
+        "icon": "mdi:bed-king-outline"
+      },
+      {
+        "show_in_sidebar": true,
+        "icon": "mdi:video",
+        "title": "Security",
+        "require_admin": true,
+        "mode": "storage",
+        "url_path": "lovelace-security",
+        "id": "lovelace_security"
+      },
+      {
+        "show_in_sidebar": true,
+        "title": "Lights",
+        "require_admin": true,
+        "mode": "storage",
+        "url_path": "lovelace-office",
+        "id": "lovelace_office",
+        "icon": "mdi:lightbulb-group"
+      },
+      {
+        "show_in_sidebar": true,
+        "title": "Plugs",
+        "require_admin": false,
+        "mode": "storage",
+        "url_path": "lovelace-plugs",
+        "id": "lovelace_plugs",
+        "icon": "mdi:power-plug"
+      },
+      {
+        "show_in_sidebar": true,
+        "title": "Monitoring",
+        "require_admin": false,
+        "mode": "storage",
+        "url_path": "lovelace-outside",
+        "id": "lovelace_outside",
+        "icon": "mdi:monitor"
+      },
+      {
+        "show_in_sidebar": true,
+        "title": "KIds Rooms",
+        "require_admin": false,
+        "mode": "storage",
+        "url_path": "kids-rooms",
+        "id": "kids_rooms",
+        "icon": "mdi:teddy-bear"
+      },
+      {
+        "id": "map",
+        "icon": "mdi:map",
+        "title": "Map",
+        "url_path": "map",
+        "require_admin": true,
+        "mode": "storage",
+        "show_in_sidebar": true
+      },
+      {
+        "id": "office_new",
+        "show_in_sidebar": true,
+        "icon": "mdi:microsoft-office",
+        "title": "Offices",
+        "require_admin": false,
+        "mode": "storage",
+        "url_path": "office-new"
+      },
+      {
+        "id": "dashboard_paincave",
+        "show_in_sidebar": true,
+        "title": "Paincave",
+        "require_admin": false,
+        "mode": "storage",
+        "url_path": "dashboard-paincave"
+      },
+      {
+        "id": "lovelace",
+        "icon": "mdi:view-dashboard",
+        "title": "Overview",
+        "url_path": "lovelace",
+        "mode": "storage",
+        "require_admin": false,
+        "show_in_sidebar": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "lovelace.lovelace_plugs",
+  "data": {
+    "config": {
+      "views": [
+        {
+          "title": "Plugs",
+          "icon": "mdi:power-plug",
+          "type": "sections",
+          "max_columns": 4,
+          "cards": [],
+          "sections": [
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Kitchen", "icon": "mdi:countertop"},
+                {"type": "tile", "entity": "switch.kasa_kitchen_dishwasher", "name": "Dishwasher"},
+                {"type": "tile", "entity": "switch.kasa_garage_door", "name": "Oatmeal"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Living Room", "icon": "mdi:sofa"},
+                {"type": "tile", "entity": "switch.kasa_livingroom_air", "name": "Fan"},
+                {"type": "tile", "entity": "switch.kasa_livingroom_christmastree", "name": "Fresh Air"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Dining Room", "icon": "mdi:silverware-fork-knife"},
+                {"type": "tile", "entity": "switch.kasa_livingroom_tv", "name": "Christmas Tree"},
+                {"type": "tile", "entity": "switch.kasa_patio_mult1", "name": "Patio Strip"},
+                {"type": "tile", "entity": "switch.wemo_dr_lights", "name": "Lights"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Entryway", "icon": "mdi:door-open"},
+                {"type": "tile", "entity": "switch.wemo_downstairs", "name": "Downstairs"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Master Bedroom", "icon": "mdi:bed-king-outline"},
+                {"type": "tile", "entity": "switch.kasa_mb_tv", "name": "TV"},
+                {"type": "tile", "entity": "switch.kasa_mb_toilet_fan", "name": "Toilet Fan"},
+                {"type": "tile", "entity": "switch.kasa_mb_shower_fan", "name": "Shower Fan"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Nicole", "icon": "mdi:account-heart"},
+                {"type": "tile", "entity": "switch.kasa_2nd_shower_fan", "name": "Shower Fan"},
+                {"type": "tile", "entity": "switch.kasa_nicole_freshair", "name": "Fresh Air"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Joshua", "icon": "mdi:account"},
+                {"type": "tile", "entity": "switch.kasa_josh_fan", "name": "Fan"},
+                {"type": "tile", "entity": "switch.kasa_joshua_freshair", "name": "Fresh Air"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Half Bath", "icon": "mdi:toilet"},
+                {"type": "tile", "entity": "switch.kasa_livingroom_ps5", "name": "Fresh Air"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Garage", "icon": "mdi:garage"},
+                {"type": "tile", "entity": "switch.kasa_josh_lamp", "name": "TV Roku"},
+                {"type": "tile", "entity": "switch.kasa_laundry_washer", "name": "PC Lab"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Studio", "icon": "mdi:television-play"},
+                {"type": "tile", "entity": "switch.kasa_livingroom_b", "name": "TV"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Homelab", "icon": "mdi:server"},
+                {"type": "tile", "entity": "switch.kasa_livingroom_f", "name": "KVM"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Office", "icon": "mdi:desk"},
+                {"type": "tile", "entity": "switch.kasa_office_fan", "name": "Fan"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "Porch", "icon": "mdi:home-outline"},
+                {"type": "tile", "entity": "switch.wemo_balcony", "name": "Balcony Lights"}
+              ]
+            },
+            {
+              "type": "grid",
+              "cards": [
+                {"type": "heading", "heading": "PainCave", "icon": "mdi:dumbbell"},
+                {"type": "tile", "entity": "switch.kasa_paincave_fan_side", "name": "Toilet Fresh Air"},
+                {"type": "tile", "entity": "switch.kasa_paincave_fan_peloton2", "name": "Peloton Fan"},
+                {"type": "tile", "entity": "switch.kasa_paincave_multi1", "name": "Strip 1 - All"},
+                {"type": "tile", "entity": "switch.kasa_mb_rebeca", "name": "Fan Right"},
+                {"type": "tile", "entity": "switch.kasa_mb_emmanuel", "name": "Fan Gym"},
+                {"type": "tile", "entity": "switch.kasa_mb_bed", "name": "Fan Left"},
+                {"type": "tile", "entity": "switch.kasa_paincave_multi2", "name": "Strip 2 - All"},
+                {"type": "tile", "entity": "switch.kasa_paincave_multi2_kasa_paincave_wahoo", "name": "Peloton"},
+                {"type": "tile", "entity": "switch.kasa_paincave_multi2_kasa_paincave_tv", "name": "TV"},
+                {"type": "tile", "entity": "switch.kasa_paincave_multi2_kasa_paincave_fanright", "name": "Wahoo"}
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
