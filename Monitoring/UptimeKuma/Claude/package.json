@@ -1,0 +1,14 @@
+{
+  "name": "uptime-kuma-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for UptimeKuma via Socket.IO",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "socket.io-client": "^4.8.1"
+  }
+}
