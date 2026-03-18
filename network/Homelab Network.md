@@ -57,3 +57,5 @@ Device Name,Role,Primary Connectivity
 Inter-VLAN Routing: Firewall rules are configured to prevent VLAN 6 (IoT) from reaching VLAN 5 (Home).
 
 - Redaction Policy: This file intentionally replaces all internal IP schemes with X.X.X.X and omits MAC addresses to maintain repository privacy.
+
+## Certificates
