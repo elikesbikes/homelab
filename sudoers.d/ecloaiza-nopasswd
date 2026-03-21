@@ -1,0 +1,29 @@
+# Preserve terminal capabilities for sudo commands
+Defaults env_keep += "TERMINFO"
+
+# Allow ecloaiza to run selected admin, filesystem, and troubleshooting commands without a password
+ecloaiza ALL=(ALL) NOPASSWD: \
+    /usr/bin/docker, \
+    /usr/bin/systemctl, \
+    /usr/bin/ls, \
+    /usr/bin/chmod, \
+    /usr/bin/chown, \
+    /usr/bin/dmesg, \
+    /usr/bin/journalctl, \
+    /usr/bin/df, \
+    /usr/bin/du, \
+    /usr/bin/lsblk, \
+    /usr/bin/findmnt, \
+    /usr/bin/stat, \
+    /usr/bin/ps, \
+    /usr/bin/top, \
+    /usr/bin/htop, \
+    /usr/bin/free, \
+    /usr/bin/vmstat, \
+    /usr/bin/uptime, \
+    /usr/bin/watch, \
+    /usr/bin/lsof, \
+    /usr/bin/strace, \
+    /usr/bin/pmap, \
+    /usr/bin/ulimit
+

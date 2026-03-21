@@ -1,0 +1,7 @@
+# Admin-capability commands (no password)
+ecloaiza ALL=(ALL) NOPASSWD: \
+    /usr/bin/docker, \
+    /usr/bin/systemctl, \
+    /usr/bin/chmod, \
+    /usr/bin/chown
+
