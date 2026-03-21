@@ -16,6 +16,7 @@ ecloaiza ALL=(ALL) NOPASSWD: \
     /usr/bin/findmnt, \
     /usr/bin/stat, \
     /usr/bin/ps, \
+    /usr/bin/apt, \
     /usr/bin/top, \
     /usr/bin/htop, \
     /usr/bin/free, \
