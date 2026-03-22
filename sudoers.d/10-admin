@@ -2,6 +2,7 @@
 ecloaiza ALL=(ALL) NOPASSWD: \
     /usr/bin/docker, \
     /usr/bin/systemctl, \
-    /usr/bin/chmod, \
-    /usr/bin/chown
+    /usr/bin/apt, \
+    /usr/sbin/visudo, \
+    /usr/bin/unison
 

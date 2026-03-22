@@ -1,9 +1,16 @@
-# Filesystem visibility (read-only) (no password)
+# Filesystem operations (no password)
 ecloaiza ALL=(ALL) NOPASSWD: \
     /usr/bin/ls, \
     /usr/bin/df, \
     /usr/bin/du, \
     /usr/bin/lsblk, \
     /usr/bin/findmnt, \
-    /usr/bin/stat
+    /usr/bin/stat, \
+    /usr/bin/chmod, \
+    /usr/bin/chown, \
+    /usr/bin/mkdir, \
+    /usr/bin/cp, \
+    /usr/bin/tee, \
+    /usr/bin/sed, \
+    /usr/bin/grep
 
