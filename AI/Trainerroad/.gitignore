@@ -2,3 +2,5 @@
 .tmp/
 credentials.json
 token.json
+*.xlsx
+*.xls

@@ -101,19 +101,18 @@ def _seconds_to_min(s) -> float | None:
         return None
 
 
-# Maps TR WorkoutType integers to human-readable training zone labels.
-# Source: TrainerRoad API (field WorkoutType on activity card models).
-WORKOUT_TYPE_MAP = {
-    1:  "Endurance",
-    2:  "Sweet Spot",
-    3:  "Threshold",
-    4:  "VO2 Max",
-    5:  "Anaerobic",
-    6:  "Sprint",
-    7:  "Recovery",
-    8:  "Tempo",
-    9:  "Over-Under",
-    10: "Race",
+# Maps TR progressionId → training zone name.
+# Discovered via /app/api/workout-information?ids= and /app/api/career/{id}/levels.
+# Confirmed: 84=Sweet Spot (Mount Hayes -4 goal description says "Sweet Spot work").
+# Others inferred from levels endpoint: 33=Endurance (highest level for an endurance rider),
+# 83=Threshold, 85=VO2 Max, 79=Anaerobic, 16=Tempo.
+PROGRESSION_TYPE_MAP = {
+    16: "Tempo",
+    33: "Endurance",
+    79: "Anaerobic",
+    83: "Threshold",
+    84: "Sweet Spot",
+    85: "VO2 Max",
 }
 
 
@@ -147,25 +146,11 @@ def parse_activity(raw: dict, username: str, category_cache: dict = None) -> dic
         except Exception:
             pass
 
-    # Resolve workout category: prefer live lookup cache, then API fields, then local map
+    # Resolve workout category from batch-fetched progressionId cache
     workout_category = ""
     workout_id = raw.get("WorkoutId")
     if category_cache and workout_id and workout_id in category_cache:
         workout_category = category_cache[workout_id]
-    if not workout_category:
-        wt_int = raw.get("WorkoutType")
-        if wt_int is not None:
-            try:
-                workout_category = WORKOUT_TYPE_MAP.get(int(wt_int), f"Type {wt_int}")
-            except (TypeError, ValueError):
-                workout_category = str(wt_int)
-    if not workout_category:
-        workout_category = (
-            raw.get("WorkoutTypeDescription")
-            or raw.get("EnergySystem")
-            or raw.get("TrainingType")
-            or ""
-        )
 
     return {
         "date":              date,
@@ -252,30 +237,29 @@ async def fetch_all_activities(context, username: str) -> list[dict]:
 
 
 async def fetch_workout_categories(context, workout_ids: set) -> dict:
-    """Fetch workout type for each unique WorkoutId. Returns {workoutId: category_string}."""
+    """Batch-fetch progressionId for each WorkoutId via /workout-information?ids=...
+    Returns {workoutId: category_string}."""
     if not workout_ids:
         return {}
     cache = {}
     ids = sorted(workout_ids)
-    print(f"🏋️  Fetching workout categories for {len(ids)} unique workouts...")
-    for i, wid in enumerate(ids, 1):
+    BATCH = 50
+    print(f"🏋️  Fetching workout categories for {len(ids)} unique workouts ({len(ids)//BATCH + 1} batch(es))...")
+    for start in range(0, len(ids), BATCH):
+        batch = ids[start:start + BATCH]
+        ids_param = ",".join(str(wid) for wid in batch)
         try:
-            resp = await context.request.get(f"{APP_API}/workouts/{wid}")
+            resp = await context.request.get(f"{APP_API}/workout-information?ids={ids_param}")
             if resp.status == 200:
-                data = await resp.json()
-                category = (
-                    data.get("WorkoutTypeName")
-                    or data.get("EnergySystemName")
-                    or data.get("WorkoutType", {}).get("Name", "") if isinstance(data.get("WorkoutType"), dict) else ""
-                    or str(data.get("WorkoutTypeId", "")) if data.get("WorkoutTypeId") else ""
-                )
-                cache[wid] = category
-            if i % 100 == 0:
-                print(f"   {i}/{len(ids)} fetched...")
-            await asyncio.sleep(0.3)
-        except Exception:
-            pass
-    print(f"   ✓ Categories fetched for {len(cache)}/{len(ids)} workouts.")
+                for item in await resp.json():
+                    wid = item.get("Id")
+                    prog_id = item.get("ProgressionId")
+                    if wid and prog_id is not None:
+                        cache[wid] = PROGRESSION_TYPE_MAP.get(int(prog_id), f"Zone {prog_id}")
+        except Exception as e:
+            print(f"   ⚠️  Batch {start//BATCH + 1} failed: {e}")
+        await asyncio.sleep(0.5)
+    print(f"   ✓ Categories resolved for {len(cache)}/{len(ids)} workouts.")
     return cache
 
 
@@ -302,12 +286,27 @@ async def run(username: str, output_path: str, headless: bool = True,
 
         if dump_workout:
             import json
-            resp = await context.request.get(f"{APP_API}/workouts/{dump_workout}")
-            print(f"\n🔍 Raw workout API response for WorkoutId={dump_workout} (status {resp.status}):\n")
-            if resp.status == 200:
-                print(json.dumps(await resp.json(), indent=2))
-            else:
-                print(await resp.text())
+            # Intercept all API calls made when loading the activity detail page
+            captured = []
+
+            async def on_response(response):
+                url = response.url
+                if "/api/" in url and response.status == 200:
+                    try:
+                        body = await response.json()
+                        captured.append({"url": url, "body": body})
+                    except Exception:
+                        pass
+
+            page.on("response", on_response)
+            await page.goto(f"{BASE_URL}/app/activities/{dump_workout}", wait_until="load", timeout=60000)
+            await asyncio.sleep(5)
+
+            print(f"\n🔍 API calls captured while loading activity {dump_workout}:\n")
+            for item in captured:
+                print(f"── {item['url']}")
+                print(json.dumps(item["body"], indent=2)[:2000])
+                print()
             await browser.close()
             return
 
