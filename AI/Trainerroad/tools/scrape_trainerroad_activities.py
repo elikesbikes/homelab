@@ -37,6 +37,7 @@ COLUMNS = [
     ("name",              "Name",              40),
     ("sport",             "Sport",             14),
     ("activity_type",     "Activity Type",     20),
+    ("workout_category",  "Workout Category",  22),
     ("duration_min",      "Duration (min)",    14),
     ("tss",               "TSS",                8),
     ("intensity_factor",  "IF",                 8),
@@ -100,7 +101,23 @@ def _seconds_to_min(s) -> float | None:
         return None
 
 
-def parse_activity(raw: dict, username: str) -> dict:
+# Maps TR WorkoutType integers to human-readable training zone labels.
+# Source: TrainerRoad API (field WorkoutType on activity card models).
+WORKOUT_TYPE_MAP = {
+    1:  "Endurance",
+    2:  "Sweet Spot",
+    3:  "Threshold",
+    4:  "VO2 Max",
+    5:  "Anaerobic",
+    6:  "Sprint",
+    7:  "Recovery",
+    8:  "Tempo",
+    9:  "Over-Under",
+    10: "Race",
+}
+
+
+def parse_activity(raw: dict, username: str, category_cache: dict = None) -> dict:
     date_raw = raw.get("Started") or raw.get("WorkoutDate") or ""
     try:
         date = datetime.fromisoformat(date_raw.rstrip("Z")).strftime("%Y-%m-%d") if date_raw else ""
@@ -130,11 +147,32 @@ def parse_activity(raw: dict, username: str) -> dict:
         except Exception:
             pass
 
+    # Resolve workout category: prefer live lookup cache, then API fields, then local map
+    workout_category = ""
+    workout_id = raw.get("WorkoutId")
+    if category_cache and workout_id and workout_id in category_cache:
+        workout_category = category_cache[workout_id]
+    if not workout_category:
+        wt_int = raw.get("WorkoutType")
+        if wt_int is not None:
+            try:
+                workout_category = WORKOUT_TYPE_MAP.get(int(wt_int), f"Type {wt_int}")
+            except (TypeError, ValueError):
+                workout_category = str(wt_int)
+    if not workout_category:
+        workout_category = (
+            raw.get("WorkoutTypeDescription")
+            or raw.get("EnergySystem")
+            or raw.get("TrainingType")
+            or ""
+        )
+
     return {
         "date":              date,
         "name":              raw.get("Name") or "",
         "sport":             raw.get("Sport") or "",
         "activity_type":     activity_type,
+        "workout_category":  workout_category,
         "duration_min":      _seconds_to_min(raw.get("Duration")),
         "tss":               tss,
         "intensity_factor":  if_val,
@@ -213,7 +251,36 @@ async def fetch_all_activities(context, username: str) -> list[dict]:
     return all_raw
 
 
-async def run(username: str, output_path: str, headless: bool = True) -> None:
+async def fetch_workout_categories(context, workout_ids: set) -> dict:
+    """Fetch workout type for each unique WorkoutId. Returns {workoutId: category_string}."""
+    if not workout_ids:
+        return {}
+    cache = {}
+    ids = sorted(workout_ids)
+    print(f"🏋️  Fetching workout categories for {len(ids)} unique workouts...")
+    for i, wid in enumerate(ids, 1):
+        try:
+            resp = await context.request.get(f"{APP_API}/workouts/{wid}")
+            if resp.status == 200:
+                data = await resp.json()
+                category = (
+                    data.get("WorkoutTypeName")
+                    or data.get("EnergySystemName")
+                    or data.get("WorkoutType", {}).get("Name", "") if isinstance(data.get("WorkoutType"), dict) else ""
+                    or str(data.get("WorkoutTypeId", "")) if data.get("WorkoutTypeId") else ""
+                )
+                cache[wid] = category
+            if i % 100 == 0:
+                print(f"   {i}/{len(ids)} fetched...")
+            await asyncio.sleep(0.3)
+        except Exception:
+            pass
+    print(f"   ✓ Categories fetched for {len(cache)}/{len(ids)} workouts.")
+    return cache
+
+
+async def run(username: str, output_path: str, headless: bool = True,
+              dump_raw: int = 0, dump_workout: int = 0) -> None:
     from playwright.async_api import async_playwright
 
     email    = os.getenv("TR_EMAIL")
@@ -233,14 +300,42 @@ async def run(username: str, output_path: str, headless: bool = True) -> None:
             await browser.close()
             raise SystemExit("Aborting — login failed.")
 
+        if dump_workout:
+            import json
+            resp = await context.request.get(f"{APP_API}/workouts/{dump_workout}")
+            print(f"\n🔍 Raw workout API response for WorkoutId={dump_workout} (status {resp.status}):\n")
+            if resp.status == 200:
+                print(json.dumps(await resp.json(), indent=2))
+            else:
+                print(await resp.text())
+            await browser.close()
+            return
+
         raw_activities = await fetch_all_activities(context, username)
+
+        if not raw_activities:
+            await browser.close()
+            raise SystemExit("❌ No activities returned by API.")
+
+        if dump_raw:
+            import json
+            await browser.close()
+            sample = raw_activities[:dump_raw]
+            print(f"\n🔍 Raw API response for first {len(sample)} activit(y/ies):\n")
+            print(json.dumps(sample, indent=2))
+            return
+
+        # Collect unique WorkoutIds from structured (non-external) TR workouts
+        workout_ids = {
+            raw.get("WorkoutId")
+            for raw in raw_activities
+            if raw.get("WorkoutId") and not raw.get("IsExternal")
+        }
+        category_cache = await fetch_workout_categories(context, workout_ids)
         await browser.close()
 
-    if not raw_activities:
-        raise SystemExit("❌ No activities returned by API.")
-
     print(f"\n📊 Parsing {len(raw_activities)} activities...")
-    activities = [parse_activity(a, username) for a in raw_activities]
+    activities = [parse_activity(a, username, category_cache) for a in raw_activities]
     activities.sort(key=lambda a: a.get("date", ""), reverse=True)
 
     export_to_excel(activities, output_path)
@@ -253,6 +348,10 @@ def main():
     parser.add_argument("--username",    default=os.getenv("TR_USERNAME", "elikesbikes"))
     parser.add_argument("--output",      default="")
     parser.add_argument("--no-headless", action="store_true", help="Show browser (debug)")
+    parser.add_argument("--dump-raw",     type=int, default=0, metavar="N",
+                        help="Print raw JSON for first N activities (skips Excel export) — use to inspect API fields")
+    parser.add_argument("--dump-workout", type=int, default=0, metavar="WORKOUT_ID",
+                        help="Print raw workout API JSON for a specific WorkoutId — use to discover zone field names")
     args = parser.parse_args()
 
     if not args.output:
@@ -263,6 +362,8 @@ def main():
         username=args.username,
         output_path=args.output,
         headless=not args.no_headless,
+        dump_raw=args.dump_raw,
+        dump_workout=args.dump_workout,
     ))
 
 

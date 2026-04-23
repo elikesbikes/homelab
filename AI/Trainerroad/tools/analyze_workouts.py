@@ -89,7 +89,14 @@ def workout_type_breakdown(activities: list[dict]) -> dict:
     counts = defaultdict(int)
     tss_by_type = defaultdict(float)
     for act in activities:
-        wtype = str(act.get("workout_type") or "Unknown").strip()
+        # Prefer training zone classification, fall back to activity type, then sport
+        wtype = (
+            act.get("workout_category")
+            or act.get("activity_type")
+            or act.get("sport")
+            or "Unknown"
+        )
+        wtype = str(wtype).strip() or "Unknown"
         counts[wtype] += 1
         tss_by_type[wtype] += safe_float(act.get("tss"))
     return {
