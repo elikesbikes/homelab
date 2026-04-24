@@ -68,9 +68,12 @@ The separation matters: the scraper and analyzer are deterministic Python script
 
 ## Prerequisites
 
+> **Note:** This project was developed and tested on **Ubuntu 24.04.4 LTS**. Other Linux distros should work, but Windows/macOS may require minor adjustments.
+
 - Python 3.11+
 - Playwright (Chromium)
 - A TrainerRoad account
+- Claude Code (already installed) with a Pro subscription — required to run the `trainerroad-insights` skill
 
 ---
 
@@ -246,3 +249,9 @@ Zone classification works by calling `/app/api/workout-information?ids=...` (bat
 - 1 second delay between paginated activity API calls
 - 0.5 second delay between workout-information batch requests (50 IDs per batch)
 - No known hard limits for normal single-user usage
+
+---
+
+## Author
+
+**TARS (Emmanuel Loaiza)**
