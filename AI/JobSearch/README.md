@@ -206,4 +206,4 @@ python3 tools/check_auth.py
 
 ## Authored By
 
-Built by **Emmanuel Loaiza** with [Claude Code](https://claude.ai/code) using the WAT framework (Workflows, Agents, Tools).
+Built by **TARS (Emmanuel Loaiza)** with [Claude Code](https://claude.ai/code) using the WAT framework (Workflows, Agents, Tools).
