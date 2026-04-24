@@ -8,6 +8,7 @@ Built on the **WAT framework** (Workflows → Agent → Tools): the agent reads 
 
 ## Table of Contents
 
+- [Quick Start](#quick-start)
 - [Prerequisites](#prerequisites)
 - [How It Works](#how-it-works)
 - [Setup](#setup-one-time)
@@ -21,6 +22,23 @@ Built on the **WAT framework** (Workflows → Agent → Tools): the agent reads 
 
 ---
 
+## Quick Start
+
+```bash
+# 1. Install dependencies
+pip3 install firecrawl-py openpyxl python-dotenv requests --break-system-packages
+
+# 2. Add your LinkedIn session cookie to .env
+echo "li_at=YOUR_COOKIE_VALUE_HERE" > .env
+
+# 3. Run the batch scraper
+python3 tools/batch_linkedin_jobs.py
+```
+
+Output lands in `.tmp/linkedin_jobs_batch_YYYYMMDD_HHMM.xlsx`.
+
+---
+
 ## Prerequisites
 
 | Requirement | Details |
@@ -29,8 +47,8 @@ Built on the **WAT framework** (Workflows → Agent → Tools): the agent reads 
 | **Python 3.8+** | `python3 --version` to confirm |
 | **pip packages** | `firecrawl-py`, `openpyxl`, `python-dotenv`, `requests` |
 | **LinkedIn account** | Logged-in session required to extract the `li_at` cookie |
-| **Firecrawl API key** | Optional — used for non-LinkedIn scraping workflows. Get one at [firecrawl.dev](https://firecrawl.dev) |
-| **`.env` file** | Must be present with `li_at` set (and optionally `FIRECRAWL_API_KEY`) |
+| **Firecrawl API key** | Optional — available for non-LinkedIn scraping workflows (LinkedIn blocks Firecrawl; not used here) |
+| **`.env` file** | Must contain `li_at` (and optionally `FIRECRAWL_API_KEY`) |
 
 ---
 
@@ -67,7 +85,15 @@ li_at=YOUR_COOKIE_VALUE_HERE
 
 > **Note:** The `li_at` cookie expires periodically (every few weeks). If the scraper returns 0 jobs, refresh this value.
 
-### 3. Verify the MCP server (optional)
+### 3. Verify authentication
+
+```bash
+python3 tools/check_auth.py
+```
+
+Exits with `✅ Cookie valid` or `❌ Cookie expired` — run this before every session if you haven't scraped in a while.
+
+### 4. Verify the MCP server (optional)
 
 The Firecrawl MCP is registered and reads `FIRECRAWL_API_KEY` from `.env`. It is not used for LinkedIn (LinkedIn blocks Firecrawl), but is available for other scraping workflows.
 
@@ -75,14 +101,15 @@ The Firecrawl MCP is registered and reads `FIRECRAWL_API_KEY` from `.env`. It is
 
 ## Running the Scraper
 
+### Batch mode (recommended — 11 keywords, deduped)
+
 ```bash
-cd /home/ecloaiza/devops/github/homelab/AI/JobSearch
 python3 tools/batch_linkedin_jobs.py
 ```
 
-Output is saved to `.tmp/linkedin_jobs_batch_YYYYMMDD_HHMM.xlsx`.
+Output: `.tmp/linkedin_jobs_batch_YYYYMMDD_HHMM.xlsx`
 
-### To run a single-keyword search instead
+### Single-keyword mode
 
 ```bash
 python3 tools/scrape_linkedin_jobs.py --keywords "devops engineer" --max-jobs 70
@@ -92,7 +119,7 @@ Full options:
 
 ```
 --keywords      Search terms (default: "infrastructure")
---geo-id        LinkedIn geo ID (default: 103644278 = United States)
+--geo-id        LinkedIn geo ID (default: 101098412 = Massachusetts)
 --distance      Distance in miles (default: 25)
 --time-filter   r86400=24h | r604800=1 week | r2592000=1 month (default: r604800)
 --max-jobs      Max results to collect (default: 650, LinkedIn caps ~70/search)
@@ -100,14 +127,17 @@ Full options:
 --output        Custom output path (default: auto-named in .tmp/)
 ```
 
+> **Geo-ID note:** The single-keyword scraper defaults to **Massachusetts** (`101098412`). The batch scraper defaults to **United States** (`103644278`). Override either with `--geo-id`.
+
 ---
 
 ## Re-running Weekly
 
 Each week:
 
-1. **Optionally refresh `li_at`** if it expired (you'll know because the scraper returns 0 jobs)
-2. Run:
+1. **Optionally verify `li_at`** — run `python3 tools/check_auth.py`
+2. **Optionally refresh `li_at`** if it expired (you'll know because `check_auth.py` fails or the scraper returns 0 jobs)
+3. Run:
 
 ```bash
 python3 tools/batch_linkedin_jobs.py
@@ -143,6 +173,7 @@ TIME_FILTER = "r604800"     # Past week
 | New York | `102571732` |
 | California | `102095887` |
 | Texas | `102748797` |
+| Remote (no geo filter) | omit `--geo-id` |
 
 ---
 
@@ -197,10 +228,16 @@ python3 tools/check_auth.py
 → Your `li_at` cookie expired. Refresh it from LinkedIn DevTools and update `.env`.
 
 **Same jobs every run**
-→ Change `TIME_FILTER` to `r86400` (24h) if running daily, or check that your cookie is fresh.
+→ Change `TIME_FILTER` to `r86400` (24h) if running daily, or confirm your cookie is fresh.
 
 **Fewer jobs than expected**
 → LinkedIn caps programmatic access at ~70 results per search window regardless of how many are shown in the browser. Add more keyword variations to the `KEYWORDS` list to increase coverage.
+
+**HTTP 429 or sudden empty pages (rate limited)**
+→ Increase `SEARCH_DELAY` and `DETAIL_DELAY` constants in `scrape_linkedin_jobs.py`. The current defaults (1.5s search / 0.8s detail) work reliably for full batch runs; bump to 3s / 1.5s if you hit limits.
+
+**`RuntimeError: Could not get CSRF token`**
+→ The `li_at` cookie is invalid or the LinkedIn homepage returned an unexpected response. Refresh the cookie and retry.
 
 ---
 
