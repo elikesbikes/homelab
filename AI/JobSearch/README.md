@@ -6,6 +6,34 @@ Built on the **WAT framework** (Workflows → Agent → Tools): the agent reads 
 
 ---
 
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [How It Works](#how-it-works)
+- [Setup](#setup-one-time)
+- [Running the Scraper](#running-the-scraper)
+- [Re-running Weekly](#re-running-weekly)
+- [Customizing the Search](#customizing-the-search)
+- [Output Fields](#output-fields)
+- [File Structure](#file-structure)
+- [Troubleshooting](#troubleshooting)
+- [Authored By](#authored-by)
+
+---
+
+## Prerequisites
+
+| Requirement | Details |
+|---|---|
+| **Claude Code Pro** | Required to run the AI agent and MCP tools. [Get it here](https://claude.ai/code) |
+| **Python 3.8+** | `python3 --version` to confirm |
+| **pip packages** | `firecrawl-py`, `openpyxl`, `python-dotenv`, `requests` |
+| **LinkedIn account** | Logged-in session required to extract the `li_at` cookie |
+| **Firecrawl API key** | Optional — used for non-LinkedIn scraping workflows. Get one at [firecrawl.dev](https://firecrawl.dev) |
+| **`.env` file** | Must be present with `li_at` set (and optionally `FIRECRAWL_API_KEY`) |
+
+---
+
 ## How It Works
 
 1. **Authentication** — Uses your LinkedIn session cookie (`li_at`) to make authenticated requests. No browser automation needed.
@@ -148,7 +176,8 @@ JobSearch/
 ├── .gitignore
 ├── tools/
 │   ├── scrape_linkedin_jobs.py      ← single keyword scraper + Excel exporter
-│   └── batch_linkedin_jobs.py       ← multi-keyword orchestrator with dedup
+│   ├── batch_linkedin_jobs.py       ← multi-keyword orchestrator with dedup
+│   └── check_auth.py               ← validates your li_at cookie is still active
 ├── workflows/
 │   └── scrape_linkedin_jobs.md      ← SOP: how to run, troubleshoot, and extend
 └── .tmp/                            ← generated Excel files land here (gitignored)
@@ -172,3 +201,9 @@ python3 tools/check_auth.py
 
 **Fewer jobs than expected**
 → LinkedIn caps programmatic access at ~70 results per search window regardless of how many are shown in the browser. Add more keyword variations to the `KEYWORDS` list to increase coverage.
+
+---
+
+## Authored By
+
+Built by **Emmanuel Loaiza** with [Claude Code](https://claude.ai/code) using the WAT framework (Workflows, Agents, Tools).
