@@ -1,0 +1,10 @@
+---
+- name: Pull dotfiles
+  hosts: all:!tars
+  become: no
+
+  tasks:
+    - name: Run gpull_dotfiles
+      shell: gpull_dotfiles
+      args:
+        executable: /bin/bash
