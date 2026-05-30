@@ -6,7 +6,6 @@ import GroceryList from './components/GroceryList'
 import ForecastPanel from './components/ForecastPanel'
 import ReviewTrip from './components/ReviewTrip'
 import InsightsPanel from './components/InsightsPanel'
-import NamePickerModal from './components/NamePickerModal'
 
 const PROXY_URL = window.location.origin
 const FORECAST_DELAY_MS = 2000
@@ -19,7 +18,6 @@ function matchForecastItem(itemName, forecastItems) {
 }
 
 export default function App() {
-  const [currentUser, setCurrentUser] = useState(() => localStorage.getItem('grocery_user') || '')
   const [items, setItems] = useState([])
   const [aiData, setAiData] = useState({})       // { [itemId]: { price, store, storeProduct } }
   const [forecast, setForecast] = useState(null)
@@ -193,7 +191,6 @@ export default function App() {
       notes: notes || '',
       is_bought: false,
       preferred_store: store || 'Costco',
-      added_by: currentUser,
     })
 
     if (knownResult) {
@@ -219,7 +216,7 @@ export default function App() {
     }
 
     setItems(prev => prev.some(i => i.id === record.id) ? prev : [...prev, record])
-  }, [currentUser])
+  }, [])
 
   const toggleBought = useCallback(async (item) => {
     await pb.collection('grocery_items').update(item.id, { is_bought: !item.is_bought })
@@ -268,10 +265,6 @@ export default function App() {
     })
     setUnverifiedCount(prev => prev + bought.length)
   }, [items, aiData])
-
-  if (!currentUser) {
-    return <NamePickerModal onSelect={name => { localStorage.setItem('grocery_user', name); setCurrentUser(name) }} />
-  }
 
   return (
     <div className="min-h-screen bg-navy-900">

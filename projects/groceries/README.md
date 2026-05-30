@@ -6,22 +6,22 @@ Shared household grocery list with AI-powered spending forecasts. Real-time sync
 
 ## Table of Contents
 
-1. [Architecture](#architecture)
-2. [Stack](#stack)
-3. [Ports & Access](#ports--access)
-4. [Environment Variables](#environment-variables)
-5. [PocketBase Schema](#pocketbase-schema)
-6. [Features](#features)
-7. [Key Implementation Patterns](#key-implementation-patterns)
-8. [Deploy](#deploy)
-9. [File Structure](#file-structure)
-10. [Costco Receipt Import](#costco-receipt-import)
-11. [Firecrawl Notes](#firecrawl-notes)
-12. [Bugs Fixed](#bugs-fixed)
+1. [Architecture](#1-architecture)
+2. [Stack](#2-stack)
+3. [Ports & Access](#3-ports--access)
+4. [Environment Variables](#4-environment-variables)
+5. [PocketBase Schema](#5-pocketbase-schema)
+6. [Features](#6-features)
+7. [Key Implementation Patterns](#7-key-implementation-patterns)
+8. [Deploy](#8-deploy)
+9. [File Structure](#9-file-structure)
+10. [Costco Receipt Import](#10-costco-receipt-import)
+11. [Firecrawl Notes](#11-firecrawl-notes)
+12. [Bugs Fixed](#12-bugs-fixed)
 
 ---
 
-## Architecture
+## 1. Architecture
 
 ```
 [Browser] → groceries.home.elikesbikes.com → grocery-proxy:3001
@@ -38,7 +38,7 @@ Two containers, one external DNS entry. The Express proxy serves the built React
 
 ---
 
-## Stack
+## 2. Stack
 
 | Layer | Tech | Version |
 |---|---|---|
@@ -51,7 +51,7 @@ Two containers, one external DNS entry. The Express proxy serves the built React
 
 ---
 
-## Ports & Access
+## 3. Ports & Access
 
 | Service | Port | Purpose |
 |---|---|---|
@@ -70,7 +70,7 @@ All collection API rules: `""` (open, no auth required)
 
 ---
 
-## Environment Variables
+## 4. Environment Variables
 
 Copy `.env.example` to `.env` and fill in values. Never commit `.env`.
 
@@ -92,7 +92,7 @@ PB_ADMIN_PASSWORD=...
 
 ---
 
-## PocketBase Schema
+## 5. PocketBase Schema
 
 ### Collection: `grocery_items`
 
@@ -127,7 +127,7 @@ PB_ADMIN_PASSWORD=...
 
 ---
 
-## Features
+## 6. Features
 
 ### User Identity
 
@@ -193,7 +193,7 @@ Bought items are saved to `purchase_history` with `verified=false` and deleted f
 
 ---
 
-## Key Implementation Patterns
+## 7. Key Implementation Patterns
 
 ### `pinnedAiIds` — prevent forecast overwriting user-selected product
 
@@ -232,7 +232,7 @@ Express proxy serves the React SPA (`./public/`) AND forwards PocketBase API tra
 
 ---
 
-## Deploy
+## 8. Deploy
 
 ```bash
 cd /home/ecloaiza/devops/projects/groceries
@@ -259,7 +259,7 @@ sudo systemctl status groceries    # check status
 
 ---
 
-## File Structure
+## 9. File Structure
 
 ```
 groceries/
@@ -303,7 +303,7 @@ groceries/
 
 ---
 
-## Costco Receipt Import
+## 10. Costco Receipt Import
 
 Costco order history is available via GraphQL (Network tab at the orders page). Akamai blocks headless browser login, so capture is manual from an authenticated browser session.
 
@@ -321,7 +321,7 @@ Receipts imported (all 2026):
 
 ---
 
-## Firecrawl Notes
+## 11. Firecrawl Notes
 
 - **Always `proxy: 'stealth'`** — `'basic'` is blocked by both Costco and Sprouts, returns bot-detection pages; AI hallucinates products from those pages
 - Costco `waitFor`: 12000ms (slow JS rendering), AbortController: `waitFor + 20000`
@@ -332,7 +332,7 @@ Receipts imported (all 2026):
 
 ---
 
-## Bugs Fixed
+## 12. Bugs Fixed
 
 | Bug | Fix |
 |---|---|
