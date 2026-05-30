@@ -15,17 +15,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 from scrape_linkedin_jobs import scrape, export_to_excel
 
 KEYWORDS = [
-    "infrastructure",
-    "infrastructure engineer",
     "infrastructure manager",
-    "cloud infrastructure",
-    "devops engineer",
-    "platform engineer",
-    "site reliability engineer",
-    "systems engineer",
-    "cloud engineer",
-    "kubernetes engineer",
-    "terraform engineer",
+    "network engineering manager",
+    "network operations manager",
+    "IT manager",
 ]
 
 GEO_ID            = "103644278"  # United States
