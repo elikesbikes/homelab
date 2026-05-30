@@ -1,0 +1,5 @@
+.env
+pb_data/
+app/node_modules/
+app/dist/
+proxy/node_modules/

@@ -1,0 +1,35 @@
+services:
+  grocery-pb:
+    image: ghcr.io/muchobien/pocketbase:latest
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    env_file: .env
+    command: ["--migrationsDir=/pb_migrations"]
+    volumes:
+      - ./pb_data:/pb_data
+      - ./pb_migrations:/pb_migrations
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://192.168.5.16:514"
+        tag: "grocery-pb"
+
+  grocery-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    env_file: .env
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://192.168.5.16:514"
+        tag: "grocery-proxy"
+
+networks:
+  default:
+    name: FRONTEND
+    external: true

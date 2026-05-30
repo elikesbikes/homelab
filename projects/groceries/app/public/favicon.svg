@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Dark navy rounded square background -->
+  <rect width="32" height="32" rx="7" fill="#0f172a"/>
+
+  <!-- Bag body -->
+  <rect x="8" y="14" width="16" height="13" rx="2" fill="#15803d"/>
+  <!-- Bag top fold highlight -->
+  <rect x="8" y="14" width="16" height="3" rx="1.5" fill="#16a34a"/>
+
+  <!-- Bag handles (two arcs) -->
+  <path d="M12 14 Q12 9 16 9 Q20 9 20 14" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Leaf stem -->
+  <line x1="16" y1="20" x2="16" y2="24" stroke="#86efac" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Leaf shape -->
+  <path d="M16 20 Q19 18 19 15 Q16 16 16 20Z" fill="#4ade80"/>
+  <path d="M16 20 Q13 18 13 15 Q16 16 16 20Z" fill="#86efac"/>
+</svg>
