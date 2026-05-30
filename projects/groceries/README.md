@@ -1,6 +1,6 @@
 # Grocery Forecast App
 
-Shared household grocery list with AI-powered spending forecasts. Real-time sync across devices. Three users: **TARS**, **Wife**, **Son**. Fully self-hosted except the Claude API.
+Shared household grocery list with AI-powered spending forecasts. Real-time sync across devices. Fully self-hosted except the Claude API.
 
 ---
 
@@ -103,7 +103,6 @@ PB_ADMIN_PASSWORD=...
 | `unit` | text | Optional (lb, oz, pkg, etc.) |
 | `category` | text | produce / dairy / meat / frozen / pantry / other |
 | `notes` | text | Optional |
-| `added_by` | text | **Required** — TARS / Wife / Son |
 | `is_bought` | bool | Checkbox state |
 | `preferred_store` | text | Costco or Sprouts |
 | `ai_price` | number | Unit price saved from last forecast |
@@ -128,10 +127,6 @@ PB_ADMIN_PASSWORD=...
 ---
 
 ## 6. Features
-
-### User Identity
-
-On first visit, a name picker modal asks **Who are you?** (TARS / Wife / Son). The selection is saved to `localStorage` and included as `added_by` on every item create. Required by the PocketBase schema.
 
 ### Add Item Form
 
@@ -206,10 +201,6 @@ Firecrawl takes 5–12 seconds. Without protection, `onBlur` closes the dropdown
 ### `lastForecastSig` — prevent forecast infinite loop
 
 The forecast saves AI data back to PocketBase, which triggers a realtime `update` event, which changes `items`, which would re-trigger the forecast. Fix: build a signature from `id:name:quantity:preferred_store:is_bought` per active item. `ai_price`/`ai_store`/`ai_product` are intentionally excluded from the sig.
-
-### `addItem` dependency array — stale closure with `useCallback`
-
-`addItem` captures `currentUser` from the render it was created in. Using `useCallback(fn, [])` would permanently capture the initial empty string. The dependency array is `[currentUser]` so the callback recreates when the user name changes.
 
 ### `requestKey: null` — PocketBase iOS auto-cancellation
 
@@ -287,13 +278,12 @@ groceries/
     ├── tailwind.config.js
     └── src/
         ├── main.jsx
-        ├── App.jsx                  ← Global state, forecast logic, pinnedAiIds, currentUser
+        ├── App.jsx                  ← Global state, forecast logic, pinnedAiIds
         ├── utils/
         │   ├── pb.js                ← PocketBase client (window.location.origin)
         │   ├── categories.js        ← Keyword → category detection
         │   └── prompts.js
         └── components/
-            ├── NamePickerModal.jsx  ← First-visit user selector (TARS / Wife / Son)
             ├── AddItemForm.jsx      ← Live store search, history autocomplete, isSearchingRef
             ├── GroceryList.jsx      ← Qty column, Total (price × qty) column
             ├── ForecastPanel.jsx    ← totalEstimate display, category breakdown
@@ -312,7 +302,7 @@ Costco order history is available via GraphQL (Network tab at the orders page). 
 - Auth to PocketBase as admin, then POST to `purchase_history`
 - Skip lines: description starts with `/`, starts with `CA REDEMP`, unit < 0, dept 39 (clothing)
 - Dept → category: 65=produce, 18=frozen, 17=dairy, 13/12=pantry, 61/63/19=meat, rest=other
-- Sets `added_by="TARS"`, `verified=true`
+- Sets `verified=true`
 - **Not idempotent** — don't run twice for the same receipt
 
 Receipts imported (all 2026):
@@ -336,8 +326,7 @@ Receipts imported (all 2026):
 
 | Bug | Fix |
 |---|---|
-| `added_by` required field never sent → every create silently failed | `addItem` now sends `added_by: currentUser`; NamePickerModal gates app on first visit, persists to localStorage |
-| `useCallback(fn, [])` stale closure sent empty `added_by` even after name picked | Added `currentUser` to `addItem` dependency array |
+| `added_by` required field blocked every item create silently | Removed field from schema entirely (migration 7) — was write-only, never displayed or filtered |
 | Forecast total ignored quantity — 3 yogurts showed price of 1 | `totalEstimate` and `categoryBreakdown` now multiply by `item.quantity` |
 | Qty input rejected decimals | Changed `step="1"` → `step="any"`, `min="1"` → `min="0.01"` |
 | History suggestion pre-filled qty but `parseJsonText` hardcoded qty:1/unit:pkg | `parseJsonText` now uses `it.quantity`/`it.unit` from parsed result |

@@ -161,7 +161,7 @@ def get_job_details(session: requests.Session, job_id: str, csrf: str) -> dict:
         **VOYAGER_HEADERS,
         "Csrf-Token": csrf,
         "Cookie": (
-            f'li_at={session.cookies.get("li_at")}; '
+            f'li_at={next((c.value for c in session.cookies if c.name == "li_at"), "")}; '
             f'JSESSIONID="{csrf}"'
         ),
     }
