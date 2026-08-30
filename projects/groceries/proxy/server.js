@@ -8,8 +8,9 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()
 const PORT = process.env.PORT || 3001
-const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY
-const CLAUDE_MODEL = process.env.CLAUDE_MODEL || 'claude-haiku-4-5-20251001'
+const OLLAMA_URL = process.env.OLLAMA_URL || 'http://ai-ollama-prod-1:11434'
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2'
+const OLLAMA_VISION_MODEL = process.env.OLLAMA_VISION_MODEL || 'llava:7b'
 const FIRECRAWL_API_KEY = process.env.FIRECRAWL_API_KEY
 const SPROUTS_STORE_ID = process.env.SPROUTS_STORE_ID || '1216'
 
@@ -241,29 +242,23 @@ app.get('/api/search-products', async (req, res) => {
     console.log(`{"level":"warn","msg":"Firecrawl returned no results, falling back to Claude","store":${JSON.stringify(targetStore)},"q":${JSON.stringify(q)}}`)
   }
 
-  // Fallback: ask Claude for a price estimate when Firecrawl fails
-  if (!CLAUDE_API_KEY) return res.status(404).json({ error: 'No results found' })
+  // Fallback: ask Ollama for a price estimate when Firecrawl fails
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch(`${OLLAMA_URL}/api/chat`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': CLAUDE_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: CLAUDE_MODEL,
-        max_tokens: 512,
-        system: `You are a grocery price assistant. Return ONLY valid JSON with no markdown, no explanation, no trailing text.`,
-        messages: [{
-          role: 'user',
-          content: `List 3 products matching "${q}" sold at ${targetStore} in San Diego. Prefer Kirkland Signature at Costco. Respond with ONLY this JSON and nothing else:\n{"results":[{"storeProduct":"name","price":0.00},{"storeProduct":"name","price":0.00},{"storeProduct":"name","price":0.00}]}`,
-        }],
+        model: OLLAMA_MODEL,
+        stream: false,
+        messages: [
+          { role: 'system', content: 'You are a grocery price assistant. Return ONLY valid JSON with no markdown, no explanation, no trailing text.' },
+          { role: 'user', content: `List 3 products matching "${q}" sold at ${targetStore} in San Diego. Prefer Kirkland Signature at Costco. Respond with ONLY this JSON and nothing else:\n{"results":[{"storeProduct":"name","price":0.00},{"storeProduct":"name","price":0.00},{"storeProduct":"name","price":0.00}]}` },
+        ],
       }),
     })
-    if (!response.ok) throw new Error(`Claude ${response.status}`)
+    if (!response.ok) throw new Error(`Ollama ${response.status}`)
     const data = await response.json()
-    const rawText = data.content[0].text
+    const rawText = data.message?.content || ''
     let parsed
     try { parsed = JSON.parse(rawText) } catch {
       const m = rawText.match(/```(?:json)?\s*([\s\S]*?)```/)
@@ -271,10 +266,10 @@ app.get('/api/search-products', async (req, res) => {
     }
     const results = (parsed?.results || []).filter(r => r.price > 0)
     if (!results.length) return res.status(404).json({ error: 'No results found' })
-    console.log(`{"level":"info","msg":"Claude fallback search","store":${JSON.stringify(targetStore)},"q":${JSON.stringify(q)},"count":${results.length}}`)
-    return res.json({ results, source: 'claude' })
+    console.log(`{"level":"info","msg":"Ollama fallback search","store":${JSON.stringify(targetStore)},"q":${JSON.stringify(q)},"count":${results.length}}`)
+    return res.json({ results, source: 'ollama' })
   } catch (err) {
-    console.error(`{"level":"error","msg":"Claude fallback search failed","error":${JSON.stringify(err.message)}}`)
+    console.error(`{"level":"error","msg":"Ollama fallback search failed","error":${JSON.stringify(err.message)}}`)
     return res.status(404).json({ error: 'No results found' })
   }
 })
@@ -364,7 +359,7 @@ app.post('/api/forecast', parseJson, async (req, res) => {
   let claudeItems = []
   let tips = []
 
-  if (unmatched_for_claude.length > 0 && CLAUDE_API_KEY) {
+  if (unmatched_for_claude.length > 0) {
     const itemList = unmatched_for_claude
       .map(i => {
         const base = `- ${i.quantity || 1}${i.unit ? ' ' + i.unit : ''} ${i.name}`.trim()
@@ -386,27 +381,25 @@ Respond ONLY with valid JSON — no markdown, no extra text:
 }`
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch(`${OLLAMA_URL}/api/chat`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': CLAUDE_API_KEY,
-          'anthropic-version': '2023-06-01',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: CLAUDE_MODEL,
-          max_tokens: 512,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: `Estimate prices for:\n${itemList}` }],
+          model: OLLAMA_MODEL,
+          stream: false,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: `Estimate prices for:\n${itemList}` },
+          ],
         }),
       })
 
       if (!response.ok) {
         const errText = await response.text()
-        console.error(`{"level":"error","msg":"Claude API error","status":${response.status},"body":${JSON.stringify(errText)}}`)
+        console.error(`{"level":"error","msg":"Ollama API error","status":${response.status},"body":${JSON.stringify(errText)}}`)
       } else {
         const data = await response.json()
-        const rawText = data.content[0].text
+        const rawText = data.message?.content || ''
         let parsed
         try {
           parsed = JSON.parse(rawText)
@@ -420,7 +413,7 @@ Respond ONLY with valid JSON — no markdown, no extra text:
         }
       }
     } catch (err) {
-      console.error(`{"level":"error","msg":"Claude call failed","error":${JSON.stringify(err.message)}}`)
+      console.error(`{"level":"error","msg":"Ollama call failed","error":${JSON.stringify(err.message)}}`)
     }
   }
 
@@ -443,7 +436,7 @@ Respond ONLY with valid JSON — no markdown, no extra text:
   }
 
   const fromWeb = webScraped.length
-  console.log(`{"level":"info","msg":"Forecast generated","total":${totalEstimate.toFixed(2)},"fromHistory":${matched.length},"fromWeb":${fromWeb},"fromClaude":${claudeItems.length}}`)
+  console.log(`{"level":"info","msg":"Forecast generated","total":${totalEstimate.toFixed(2)},"fromHistory":${matched.length},"fromWeb":${fromWeb},"fromOllama":${claudeItems.length}}`)
 
   res.json({
     totalEstimate,
@@ -458,7 +451,6 @@ Respond ONLY with valid JSON — no markdown, no extra text:
 app.post('/api/parse-receipt', parseJson, async (req, res) => {
   const { image } = req.body
   if (!image) return res.status(400).json({ error: 'No image provided' })
-  if (!CLAUDE_API_KEY) return res.status(500).json({ error: 'API key not configured' })
 
   const { knownItems, store } = req.body
 
@@ -489,7 +481,7 @@ app.post('/api/parse-receipt', parseJson, async (req, res) => {
     ? `\n\nExact item names already in our database — when a receipt item matches one of these, use that EXACT name (same capitalization and wording):\n${knownItems.map(n => `- ${n}`).join('\n')}`
     : ''
 
-  const promptText = `Extract the purchase date and every line item from this grocery receipt.${storeContext}
+  const promptText = `Extract the purchase date and EVERY SINGLE line item from this grocery receipt. Do not stop early — list all items you can see, from top to bottom.${storeContext}
 Expand abbreviated or truncated product names into full readable names using the store guide above.
 When a receipt item matches one of the known database names listed below, use that EXACT name.
 For items not in the list, expand to a clean full product name.
@@ -515,37 +507,32 @@ Respond ONLY with valid JSON, no markdown:
 If no date is visible, omit the date field.`
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const controller = new AbortController()
+    const ollamaTimeout = setTimeout(() => controller.abort(), 180000) // 3 min for large images
+    const response = await fetch(`${OLLAMA_URL}/api/generate`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': CLAUDE_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
       body: JSON.stringify({
-        model: CLAUDE_MODEL,
-        max_tokens: 1024,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64Data } },
-            { type: 'text', text: promptText },
-          ],
-        }],
+        model: OLLAMA_VISION_MODEL,
+        stream: false,
+        format: 'json',
+        prompt: promptText,
+        images: [base64Data],
+        options: { num_predict: 4096 },
       }),
     })
+    clearTimeout(ollamaTimeout)
 
     if (!response.ok) {
       const errText = await response.text()
-      console.error(`{"level":"error","msg":"parse-receipt Claude error","status":${response.status},"body":${JSON.stringify(errText)}}`)
-      let claudeMsg = `Claude error ${response.status}`
-      try { claudeMsg = JSON.parse(errText)?.error?.message || claudeMsg } catch {}
-      return res.status(500).json({ error: claudeMsg })
+      console.error(`{"level":"error","msg":"parse-receipt Ollama error","status":${response.status},"body":${JSON.stringify(errText)}}`)
+      return res.status(500).json({ error: `Ollama error ${response.status}` })
     }
 
     const data = await response.json()
-    const rawText = data.content[0].text
-    console.log(`{"level":"info","msg":"Claude raw response","text":${JSON.stringify(rawText.slice(0, 300))}}`)
+    const rawText = data.response || ''
+    console.log(`{"level":"info","msg":"Ollama vision raw response","text":${JSON.stringify(rawText.slice(0, 300))}}`)
     let parsed
     try {
       parsed = JSON.parse(rawText)
@@ -555,7 +542,7 @@ If no date is visible, omit the date field.`
     }
 
     if (!parsed?.items) {
-      console.error(`{"level":"error","msg":"No items in Claude response","parsed":${JSON.stringify(parsed)}}`)
+      console.error(`{"level":"error","msg":"No items in Ollama response","parsed":${JSON.stringify(parsed)}}`)
       return res.status(500).json({ error: 'Could not extract receipt items' })
     }
 
@@ -570,8 +557,9 @@ If no date is visible, omit the date field.`
     console.log(`{"level":"info","msg":"Receipt parsed","items":${parsed.items.length}}`)
     res.json(parsed)
   } catch (err) {
-    console.error(`{"level":"error","msg":"parse-receipt failed","error":${JSON.stringify(err.message)}}`)
-    res.status(503).json({ error: 'Failed to reach Claude API' })
+    const isTimeout = err.name === 'AbortError'
+    console.error(`{"level":"error","msg":"parse-receipt failed","error":${JSON.stringify(err.message)},"timeout":${isTimeout}}`)
+    res.status(503).json({ error: isTimeout ? 'Ollama timed out — try a smaller or clearer photo' : 'Failed to reach Ollama' })
   }
 })
 

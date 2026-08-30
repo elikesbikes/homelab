@@ -32,7 +32,7 @@ function matchScore(a, b) {
   return jaccard >= 0.5 ? Math.round(jaccard * 60) : 0
 }
 
-function resizeImage(dataUrl, maxPx = 1600, quality = 0.85) {
+function resizeImage(dataUrl, maxPx = 1024, quality = 0.90) {
   return new Promise((resolve) => {
     const img = new Image()
     img.onload = () => {
@@ -63,7 +63,8 @@ function parseReceiptJson(json) {
           return true
         })
         .map(i => {
-          const unit = i.salesUom || i.unit || ''
+          const unitRaw = i.salesUom || i.unit || ''
+          const unit = typeof unitRaw === 'string' ? unitRaw : ''
           const isWeight = unit && unit.toUpperCase() !== 'EA'
           const qty = isWeight ? Number(i.quantity || 1) : 1
           const totalPrice = Number(i.amount || 0)
@@ -725,6 +726,8 @@ function NewReceiptForm({ onSaved }) {
     const json = JSON.parse(text.trim())
     const result = parseReceiptJson(json)
     if (!result) { setError('Unrecognized receipt format'); return }
+    if (result.store && (result.store === 'Costco' || result.store === 'Sprouts')) setStore(result.store)
+    if (result.date) setDate(result.date)
     setItems(result.items.map((it, i) => ({
       id: i,
       name: it.name,

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(docker compose *)",
+      "Bash(rm -rf /home/ecloaiza/devops/projects/groceries/pb_data/*)",
+      "Bash(curl -s -X POST http://192.168.5.127:8090/api/admins/auth-with-password -H 'Content-Type: application/json' -d '{\"identity\":\"admin@grocery.local\",\"password\":\"GroceryAdmin123!\"}')",
+      "Bash(python3 -m json.tool)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\('token','ERROR'\\)\\)\")",
+      "Bash(curl -s http://localhost:8090/api/collections/grocery_items/records -H 'Content-Type: application/json' -d '{\"name\":\"test-debug-item\",\"quantity\":1,\"unit\":\"\",\"category\":\"other\",\"notes\":\"\",\"is_bought\":false,\"preferred_store\":\"Costco\"}')",
+      "Bash(curl -s http://localhost:8090/api/collections/grocery_items)",
+      "Bash(sudo systemctl status groceries.service)"
+    ]
+  }
+}

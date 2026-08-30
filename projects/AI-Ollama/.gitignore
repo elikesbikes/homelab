@@ -1,0 +1,8 @@
+.env
+ollama/
+openwebui_data/
+openwebui_models/
+models/
+webui/
+*.log
+.DS_Store
