@@ -1,0 +1,16 @@
+# Crash / runtime diagnostics (no password)
+ecloaiza ALL=(ALL) NOPASSWD: \
+    /usr/bin/dmesg, \
+    /usr/bin/journalctl, \
+    /usr/bin/ps, \
+    /usr/bin/top, \
+    /usr/bin/htop, \
+    /usr/bin/free, \
+    /usr/bin/vmstat, \
+    /usr/bin/uptime, \
+    /usr/bin/watch, \
+    /usr/bin/lsof, \
+    /usr/bin/strace, \
+    /usr/bin/pmap, \
+    /usr/bin/prlimit
+
