@@ -8,12 +8,18 @@
     sync_script: /home/ecloaiza/devops/github/linux_dotfiles/scripts/sync-sudoers-ci.sh
 
   tasks:
-    - name: Pull latest dotfiles
+    - name: Fetch latest dotfiles
       ansible.builtin.command:
-        cmd: git pull
+        cmd: git fetch origin
         chdir: "{{ dotfiles_repo }}"
-      register: git_pull
-      changed_when: "'Already up to date' not in git_pull.stdout"
+      changed_when: false
+
+    - name: Reset to origin/main
+      ansible.builtin.command:
+        cmd: git reset --hard origin/main
+        chdir: "{{ dotfiles_repo }}"
+      register: git_reset
+      changed_when: "'HEAD is now at' in git_reset.stdout"
 
     - name: Run sudoers sync script
       ansible.builtin.command:
