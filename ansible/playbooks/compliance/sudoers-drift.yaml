@@ -1,94 +1,26 @@
 ---
 - name: Sudoers configuration drift check
   hosts: compliance
-  become: yes
+  become: no
+
   vars:
-    sudoers_src: "{{ playbook_dir }}/files/sudoers.d"
-    sudoers_dest: /etc/sudoers.d
+    dotfiles_repo: /home/ecloaiza/devops/github/linux_dotfiles
+    sync_script: /home/ecloaiza/devops/github/linux_dotfiles/scripts/sync-sudoers-ci.sh
 
   tasks:
-    - name: Detect sudo implementation
-      ansible.builtin.shell: sudo --version 2>&1 | head -n1
-      register: sudo_version_output
-      changed_when: false
-
-    - name: Set sudo type
-      ansible.builtin.set_fact:
-        sudo_type: "{{ 'sudo-rs' if 'sudo-rs' in sudo_version_output.stdout else 'sudo' }}"
-
-    - name: Find source sudoers files
-      ansible.builtin.find:
-        paths: "{{ sudoers_src }}"
-        file_type: file
-        excludes:
-          - README
-          - README.md
-      delegate_to: localhost
-      become: no
-      run_once: true
-      register: sudoers_files
-
-    - name: Build file list (excluding sudo-rs incompatible files)
-      ansible.builtin.set_fact:
-        files_to_sync: >-
-          {{ sudoers_files.files
-             | map(attribute='path')
-             | map('basename')
-             | reject('equalto', '00-defaults-logging')
-             | select('string')
-             | list }}
-        files_to_exclude: >-
-          {{ ['00-defaults-logging'] if sudo_type == 'sudo-rs' else [] }}
-
-    - name: Validate source sudoers files
+    - name: Pull latest dotfiles
       ansible.builtin.command:
-        cmd: "visudo -cf {{ sudoers_src }}/{{ item }}"
-      loop: "{{ files_to_sync }}"
-      delegate_to: localhost
-      become: no
-      run_once: true
-      changed_when: false
+        cmd: git pull
+        chdir: "{{ dotfiles_repo }}"
+      register: git_pull
+      changed_when: "'Already up to date' not in git_pull.stdout"
 
-    - name: Copy sudoers files
-      ansible.builtin.copy:
-        src: "{{ sudoers_src }}/{{ item }}"
-        dest: "{{ sudoers_dest }}/{{ item }}"
-        owner: root
-        group: root
-        mode: "0440"
-        validate: "visudo -cf %s"
-      loop: "{{ files_to_sync }}"
-      register: sudoers_changes
+    - name: Run sudoers sync script
+      ansible.builtin.command:
+        cmd: sudo {{ sync_script }}
+      register: sync_result
+      changed_when: "'Copying' in sync_result.stdout or 'changed' in sync_result.stdout"
 
-    - name: Find extra files in /etc/sudoers.d not in source
-      ansible.builtin.find:
-        paths: "{{ sudoers_dest }}"
-        file_type: file
-        excludes:
-          - README
-      register: remote_sudoers
-
-    - name: Report extra files on host
+    - name: Show sync output
       ansible.builtin.debug:
-        msg: "DRIFT: extra file '{{ item }}' exists on {{ inventory_hostname }} but not in source"
-      loop: >-
-        {{ remote_sudoers.files
-           | map(attribute='path')
-           | map('basename')
-           | difference(files_to_sync)
-           | difference(files_to_exclude)
-           | list }}
-      when: item != 'README'
-
-    - name: Summarize
-      ansible.builtin.debug:
-        msg: >-
-          {{ inventory_hostname }} ({{ sudo_type }}):
-          {{ sudoers_changes.results | selectattr('changed') | list | length }} file(s) updated,
-          {{ remote_sudoers.files
-             | map(attribute='path')
-             | map('basename')
-             | difference(files_to_sync)
-             | difference(files_to_exclude)
-             | reject('equalto', 'README')
-             | list | length }} extra file(s) detected
+        msg: "{{ sync_result.stdout_lines }}"
