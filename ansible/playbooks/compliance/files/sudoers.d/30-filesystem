@@ -1,9 +1,0 @@
-# Filesystem visibility (read-only) (no password)
-ecloaiza ALL=(ALL) NOPASSWD: \
-    /usr/bin/ls, \
-    /usr/bin/df, \
-    /usr/bin/du, \
-    /usr/bin/lsblk, \
-    /usr/bin/findmnt, \
-    /usr/bin/stat
-

@@ -1,6 +1,0 @@
-# Global sudo defaults
-Defaults env_keep += "TERMINFO"
-
-# NOTE: I/O logging (log_output / iolog_dir) removed — unsupported by sudo-rs,
-# which is the default sudo on this system. Restore these only if switching
-# back to classic sudo.
